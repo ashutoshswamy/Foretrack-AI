@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { CurrencyProvider } from "@/lib/currency";
+import Script from "next/script";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -88,7 +89,7 @@ export const metadata: Metadata = {
     ],
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "yYvANq1ViDwWDVVju8vVxnFhCaqgwWCYjgN8_6wDbD4",
   },
 };
 
@@ -132,6 +133,18 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <head>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-PYSDSRJXHN"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-PYSDSRJXHN');
+            `}
+          </Script>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
