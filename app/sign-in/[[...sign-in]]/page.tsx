@@ -8,6 +8,7 @@ export default function SignInPage() {
           Welcome to Foretrack AI
         </h1>
         <SignIn
+          fallbackRedirectUrl="/dashboard"
           appearance={{
             elements: {
               rootBox: "mx-auto",

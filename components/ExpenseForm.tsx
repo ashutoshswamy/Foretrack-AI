@@ -123,7 +123,15 @@ export default function ExpenseForm({ onSuccess }: ExpenseFormProps) {
         },
       ]);
 
-      if (error) throw error;
+      if (error) {
+        console.error(
+          "Supabase error:",
+          error.message,
+          error.details,
+          error.hint,
+        );
+        throw new Error(error.message || "Database error");
+      }
 
       setFormData({
         amount: "",
@@ -136,7 +144,7 @@ export default function ExpenseForm({ onSuccess }: ExpenseFormProps) {
     } catch (error) {
       console.error("Error adding expense:", error);
       alert(
-        `Failed to add expense: ${error instanceof Error ? error.message : "Unknown error"}`,
+        `Failed to add expense: ${error instanceof Error ? error.message : JSON.stringify(error)}`,
       );
     } finally {
       setLoading(false);

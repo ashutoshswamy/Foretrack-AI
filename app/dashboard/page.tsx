@@ -12,6 +12,7 @@ import {
   Tags,
   BarChart3,
   TrendingUp,
+  ClipboardList,
 } from "lucide-react";
 import ExpenseForm from "@/components/ExpenseForm";
 import ExpenseList from "@/components/ExpenseList";
@@ -79,6 +80,21 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
+              <Link
+                href="/transactions"
+                className="flex sm:hidden items-center justify-center w-9 h-9 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
+              >
+                <ClipboardList className="w-4 h-4 text-indigo-600" />
+              </Link>
+              <Link
+                href="/transactions"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
+              >
+                <ClipboardList className="w-4 h-4 text-indigo-600" />
+                <span className="text-sm font-medium text-gray-700">
+                  Transactions
+                </span>
+              </Link>
               <Link
                 href="/analytics"
                 className="flex sm:hidden items-center justify-center w-9 h-9 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"

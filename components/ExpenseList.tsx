@@ -447,24 +447,6 @@ export default function ExpenseList({
           </AnimatePresence>
         </div>
       )}
-
-      {expenses.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-6 pt-4 border-t border-gray-100"
-        >
-          <motion.button
-            whileHover={{ scale: 1.02, x: 5 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full py-3 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-xl transition-colors flex items-center justify-center gap-2"
-          >
-            View All Transactions
-            <ArrowRight className="w-4 h-4" />
-          </motion.button>
-        </motion.div>
-      )}
     </motion.div>
   );
 }

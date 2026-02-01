@@ -210,8 +210,7 @@ export default function Home() {
                   href="/sign-in"
                   className="inline-flex items-center gap-2 px-5 py-3 sm:px-8 sm:py-4 bg-white/80 backdrop-blur-sm text-gray-700 rounded-2xl font-semibold text-base sm:text-lg border-2 border-gray-200 hover:border-indigo-300 hover:text-indigo-600 transition-all duration-300"
                 >
-                  <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                  Watch Demo
+                  Sign In
                 </Link>
               </motion.div>
             </SignedOut>
