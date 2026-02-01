@@ -8,8 +8,6 @@
 
 A modern, AI-powered expense tracking and budgeting application built with Next.js, Supabase, Clerk authentication, and Google Gemini AI. Take control of your finances with smart categorization, personalized insights, and an intelligent financial assistant.
 
-![Foretrack AI Dashboard](https://via.placeholder.com/800x400?text=Foretrack+AI+Dashboard)
-
 ## ✨ Features
 
 - 📊 **Expense Tracking**: Log and categorize your expenses easily with an intuitive interface
