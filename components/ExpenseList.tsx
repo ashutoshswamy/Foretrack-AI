@@ -416,29 +416,30 @@ export default function ExpenseList({
                           </span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg font-bold text-gray-900">
-                          -{formatAmount(parseFloat(expense.amount.toString()))}
-                        </span>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => startEditing(expense)}
-                          className="opacity-0 group-hover:opacity-100 p-2 rounded-lg text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition-all duration-200"
-                          title="Edit expense"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => deleteExpense(expense.id)}
-                          className="opacity-0 group-hover:opacity-100 p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200"
-                          title="Delete expense"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </motion.button>
-                      </div>
+                  {/* Actions */}
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <span className="text-sm sm:text-lg font-bold text-gray-900">
+                      -{formatAmount(parseFloat(expense.amount.toString()))}
+                    </span>
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => startEditing(expense)}
+                      className="p-2 rounded-lg text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition-all duration-200 sm:opacity-0 sm:group-hover:opacity-100"
+                      title="Edit expense"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => deleteExpense(expense.id)}
+                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200 sm:opacity-0 sm:group-hover:opacity-100"
+                      title="Delete expense"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </motion.button>
+                  </div>
                     </div>
                   )}
                 </motion.div>

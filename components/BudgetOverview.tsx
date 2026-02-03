@@ -433,7 +433,7 @@ export default function BudgetOverview({ onUpdate }: BudgetOverviewProps) {
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => startEditing(stat)}
-                            className="opacity-0 group-hover:opacity-100 p-2 rounded-lg text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 transition-all duration-200"
+                            className="sm:opacity-0 sm:group-hover:opacity-100 p-2 rounded-lg text-gray-400 hover:text-emerald-500 hover:bg-emerald-50 transition-all duration-200"
                             title="Edit budget"
                           >
                             <Pencil className="w-4 h-4" />
@@ -442,7 +442,7 @@ export default function BudgetOverview({ onUpdate }: BudgetOverviewProps) {
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => deleteBudget(stat.id)}
-                            className="opacity-0 group-hover:opacity-100 p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200"
+                            className="sm:opacity-0 sm:group-hover:opacity-100 p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-200"
                             title="Delete budget"
                           >
                             <Trash2 className="w-4 h-4" />

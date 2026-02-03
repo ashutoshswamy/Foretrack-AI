@@ -170,7 +170,7 @@ export default function Home() {
 
           <motion.h1
             variants={item}
-            className="text-3xl sm:text-5xl md:text-7xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2 sm:px-0"
+            className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-2 sm:px-0"
           >
             Take Control of Your
             <span className="block gradient-text">Financial Future</span>
@@ -243,7 +243,7 @@ export default function Home() {
           {/* Stats */}
           <motion.div
             variants={item}
-            className="mt-10 sm:mt-16 grid grid-cols-3 gap-3 sm:gap-8 max-w-xl mx-auto px-4 sm:px-0"
+            className="mt-10 sm:mt-16 grid grid-cols-3 gap-2 sm:gap-8 max-w-xl mx-auto px-2 sm:px-0"
           >
             {[
               { value: "50K+", label: "Active Users", icon: Users },
@@ -535,9 +535,9 @@ export default function Home() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="mt-16 sm:mt-24 border-t border-gray-200/50 pt-8 sm:pt-12 px-2 sm:px-0"
+          className="mt-16 sm:mt-24 border-t border-gray-200/50 pt-8 sm:pt-12 px-4 sm:px-0"
         >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8 sm:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8 sm:mb-12">
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">

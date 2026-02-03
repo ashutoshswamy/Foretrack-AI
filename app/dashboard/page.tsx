@@ -66,51 +66,41 @@ export default function Dashboard() {
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg"
+                className="w-10 h-10 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg"
               >
-                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <Sparkles className="w-5 h-5 sm:w-5 sm:h-5 text-white" />
               </motion.div>
               <div>
-                <h1 className="text-base sm:text-xl font-bold gradient-text">
+                <h1 className="text-lg sm:text-xl font-bold gradient-text">
                   Foretrack AI
                 </h1>
-                <p className="text-[10px] sm:text-xs text-gray-500 hidden sm:block">
+                <p className="text-xs text-gray-500 hidden sm:block">
                   Smart Finance Dashboard
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <Link
                 href="/transactions"
-                className="flex sm:hidden items-center justify-center w-9 h-9 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
+                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
+                title="Transactions"
               >
-                <ClipboardList className="w-4 h-4 text-indigo-600" />
-              </Link>
-              <Link
-                href="/transactions"
-                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
-              >
-                <ClipboardList className="w-4 h-4 text-indigo-600" />
-                <span className="text-sm font-medium text-gray-700">
+                <ClipboardList className="w-5 h-5 text-indigo-600 sm:mr-2" />
+                <span className="hidden sm:inline text-sm font-medium text-gray-700">
                   Transactions
                 </span>
               </Link>
               <Link
                 href="/analytics"
-                className="flex sm:hidden items-center justify-center w-9 h-9 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
+                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
+                title="Analytics"
               >
-                <BarChart3 className="w-4 h-4 text-indigo-600" />
-              </Link>
-              <Link
-                href="/analytics"
-                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
-              >
-                <BarChart3 className="w-4 h-4 text-indigo-600" />
-                <span className="text-sm font-medium text-gray-700">
+                <BarChart3 className="w-5 h-5 text-indigo-600 sm:mr-2" />
+                <span className="hidden sm:inline text-sm font-medium text-gray-700">
                   Analytics
                 </span>
               </Link>
-              <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 backdrop-blur-sm">
+              <div className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 backdrop-blur-sm">
                 <motion.span
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -126,7 +116,7 @@ export default function Dashboard() {
                 appearance={{
                   elements: {
                     avatarBox:
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl ring-2 ring-indigo-500/20",
+                      "w-10 h-10 rounded-xl ring-2 ring-indigo-500/20",
                   },
                 }}
               />
@@ -164,58 +154,58 @@ export default function Dashboard() {
             className="lg:col-span-1 space-y-6"
           >
             {/* Tab Switcher */}
-            <div className="glass-card rounded-2xl p-1 sm:p-1.5 flex gap-0.5 sm:gap-1 overflow-x-auto scrollbar-hide">
+            <div className="glass-card rounded-2xl p-1.5 sm:p-1.5 flex gap-1 sm:gap-1 overflow-x-auto scrollbar-hide -mx-1 px-1 sm:mx-0">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTab("expense")}
-                className={`flex-1 min-w-[70px] py-2.5 sm:py-3 px-1.5 sm:px-2 rounded-xl font-medium text-[10px] sm:text-xs transition-all duration-300 flex items-center justify-center gap-1 sm:gap-1.5 ${
+                className={`flex-1 min-w-[85px] py-3 sm:py-3 px-2 sm:px-2 rounded-xl font-medium text-xs sm:text-xs transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-1.5 ${
                   activeTab === "expense"
                     ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg"
                     : "text-gray-600 hover:bg-white/50"
                 }`}
               >
-                <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Expense</span>
+                <Wallet className="w-4 h-4 sm:w-4 sm:h-4" />
+                <span>Expense</span>
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTab("income")}
-                className={`flex-1 min-w-[70px] py-2.5 sm:py-3 px-1.5 sm:px-2 rounded-xl font-medium text-[10px] sm:text-xs transition-all duration-300 flex items-center justify-center gap-1 sm:gap-1.5 ${
+                className={`flex-1 min-w-[85px] py-3 sm:py-3 px-2 sm:px-2 rounded-xl font-medium text-xs sm:text-xs transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-1.5 ${
                   activeTab === "income"
                     ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg"
                     : "text-gray-600 hover:bg-white/50"
                 }`}
               >
-                <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Income</span>
+                <TrendingUp className="w-4 h-4 sm:w-4 sm:h-4" />
+                <span>Income</span>
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTab("budget")}
-                className={`flex-1 min-w-[70px] py-2.5 sm:py-3 px-1.5 sm:px-2 rounded-xl font-medium text-[10px] sm:text-xs transition-all duration-300 flex items-center justify-center gap-1 sm:gap-1.5 ${
+                className={`flex-1 min-w-[85px] py-3 sm:py-3 px-2 sm:px-2 rounded-xl font-medium text-xs sm:text-xs transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-1.5 ${
                   activeTab === "budget"
                     ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg"
                     : "text-gray-600 hover:bg-white/50"
                 }`}
               >
-                <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Budget</span>
+                <Target className="w-4 h-4 sm:w-4 sm:h-4" />
+                <span>Budget</span>
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTab("categories")}
-                className={`flex-1 min-w-[70px] py-2.5 sm:py-3 px-1.5 sm:px-2 rounded-xl font-medium text-[10px] sm:text-xs transition-all duration-300 flex items-center justify-center gap-1 sm:gap-1.5 ${
+                className={`flex-1 min-w-[85px] py-3 sm:py-3 px-2 sm:px-2 rounded-xl font-medium text-xs sm:text-xs transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-1.5 ${
                   activeTab === "categories"
                     ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg"
                     : "text-gray-600 hover:bg-white/50"
                 }`}
               >
-                <Tags className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Categories</span>
+                <Tags className="w-4 h-4 sm:w-4 sm:h-4" />
+                <span>Categories</span>
               </motion.button>
             </div>
 

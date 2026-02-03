@@ -595,7 +595,7 @@ export default function Transactions() {
             {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all ${
+              className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border transition-all ${
                 showFilters
                   ? "bg-indigo-50 border-indigo-200 text-indigo-600"
                   : "border-gray-200 hover:bg-gray-50"
@@ -790,14 +790,14 @@ export default function Transactions() {
                             <button
                               onClick={() => startEditing(transaction)}
                               disabled={isDeleting}
-                              className="p-2 rounded-lg hover:bg-indigo-50 text-gray-400 hover:text-indigo-500 transition-colors disabled:opacity-50"
+                              className="p-2 rounded-lg hover:bg-indigo-50 text-gray-400 hover:text-indigo-500 transition-colors disabled:opacity-50 sm:opacity-0 sm:group-hover:opacity-100"
                             >
                               <Pencil className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => deleteTransaction(transaction)}
                               disabled={isDeleting}
-                              className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
+                              className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50 sm:opacity-0 sm:group-hover:opacity-100"
                             >
                               {isDeleting ? (
                                 <Loader2 className="w-4 h-4 animate-spin" />

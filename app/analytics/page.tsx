@@ -336,7 +336,7 @@ export default function Analytics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4"
+          className="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
         >
           <div>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
@@ -346,7 +346,7 @@ export default function Analytics() {
               Analyze your spending patterns and track your financial health
             </p>
           </div>
-          <div className="glass-card rounded-xl p-1 flex gap-0.5 sm:gap-1 overflow-x-auto scrollbar-hide">
+          <div className="glass-card rounded-xl p-1 flex gap-1 overflow-x-auto scrollbar-hide -mx-1 px-1 sm:mx-0">
             {(["week", "month", "quarter", "year"] as TimeRange[]).map(
               (range) => (
                 <motion.button
@@ -354,7 +354,7 @@ export default function Analytics() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setTimeRange(range)}
-                  className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-300 capitalize whitespace-nowrap ${
+                  className={`flex-1 min-w-[70px] px-3 sm:px-4 py-2 sm:py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-300 capitalize whitespace-nowrap ${
                     timeRange === range
                       ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg"
                       : "text-gray-600 hover:bg-white/50"
@@ -372,7 +372,7 @@ export default function Analytics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8"
         >
           {/* Total Expenses */}
           <div className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6">

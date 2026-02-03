@@ -173,7 +173,7 @@ export default function AIChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed bottom-20 sm:bottom-24 right-3 sm:right-6 w-[calc(100vw-1.5rem)] sm:w-96 sm:max-w-[calc(100vw-3rem)] h-[60vh] sm:h-[500px] max-h-[70vh] glass-card rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
+            className="fixed bottom-[4.5rem] sm:bottom-24 right-0 sm:right-6 w-full sm:w-96 h-[calc(100vh-5rem)] sm:h-[500px] sm:bg-white/80 glass-card sm:rounded-2xl rounded-t-3xl shadow-2xl z-50 flex flex-col overflow-hidden border-t border-gray-200 sm:border-0"
           >
             {/* Header */}
             <div className="p-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
