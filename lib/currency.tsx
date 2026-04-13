@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import { supabase } from "@/lib/supabase";
 
@@ -44,21 +44,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrencyState] = useState<Currency>(currencies[0]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (isLoaded && user) {
-      loadUserCurrency();
-    } else if (isLoaded && !user) {
-      // Load from localStorage for non-authenticated users
-      const saved = localStorage.getItem("foretrack_currency");
-      if (saved) {
-        const found = currencies.find((c) => c.code === saved);
-        if (found) setCurrencyState(found);
-      }
-      setLoading(false);
-    }
-  }, [user, isLoaded]);
-
-  const loadUserCurrency = async () => {
+  const loadUserCurrency = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -90,7 +76,21 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      loadUserCurrency();
+    } else if (isLoaded && !user) {
+      // Load from localStorage for non-authenticated users
+      const saved = localStorage.getItem("foretrack_currency");
+      if (saved) {
+        const found = currencies.find((c) => c.code === saved);
+        if (found) setCurrencyState(found);
+      }
+      setLoading(false);
+    }
+  }, [user, isLoaded, loadUserCurrency]);
 
   const setCurrency = async (newCurrency: Currency) => {
     setCurrencyState(newCurrency);

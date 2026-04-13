@@ -37,89 +37,63 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen animated-bg">
-      {/* Decorative Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.2 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute -top-40 -right-40 w-80 h-80 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl"
-        />
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.2 }}
-          transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-          className="absolute bottom-40 -left-40 w-80 h-80 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl"
-        />
+      {/* Background Effects */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[500px] h-[400px] bg-[radial-gradient(ellipse,rgba(201,169,110,0.04),transparent_70%)]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(52,211,153,0.03),transparent_70%)]" />
       </div>
 
       {/* Header */}
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative z-10 glass-card border-b border-white/20"
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="relative z-10 bg-[#16161a] border-b border-[#2a2a32]"
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 sm:gap-3">
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-10 h-10 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg"
-              >
-                <Sparkles className="w-5 h-5 sm:w-5 sm:h-5 text-white" />
-              </motion.div>
+              <div className="w-9 h-9 rounded-lg bg-[#c9a96e] flex items-center justify-center">
+                <Sparkles className="w-[18px] h-[18px] text-[#0c0c0e]" />
+              </div>
               <div>
-                <h1 className="text-lg sm:text-xl font-bold gradient-text">
+                <h1 className="text-base sm:text-lg font-semibold text-[#ededef] tracking-tight">
                   Foretrack AI
                 </h1>
-                <p className="text-xs text-gray-500 hidden sm:block">
+                <p className="text-[10px] text-[#5a5a66] hidden sm:block tracking-wide uppercase">
                   Smart Finance Dashboard
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 href="/transactions"
-                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
+                className="flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-lg bg-[#1e1e24] border border-[#2a2a32] hover:border-[#c9a96e]/30 transition-colors"
                 title="Transactions"
               >
-                <ClipboardList className="w-5 h-5 text-indigo-600 sm:mr-2" />
-                <span className="hidden sm:inline text-sm font-medium text-gray-700">
+                <ClipboardList className="w-4 h-4 text-[#8b8b96] sm:mr-2" />
+                <span className="hidden sm:inline text-xs font-medium text-[#8b8b96]">
                   Transactions
                 </span>
               </Link>
               <Link
                 href="/analytics"
-                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-xl bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors"
+                className="flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-lg bg-[#1e1e24] border border-[#2a2a32] hover:border-[#c9a96e]/30 transition-colors"
                 title="Analytics"
               >
-                <BarChart3 className="w-5 h-5 text-indigo-600 sm:mr-2" />
-                <span className="hidden sm:inline text-sm font-medium text-gray-700">
+                <BarChart3 className="w-4 h-4 text-[#8b8b96] sm:mr-2" />
+                <span className="hidden sm:inline text-xs font-medium text-[#8b8b96]">
                   Analytics
                 </span>
               </Link>
-              <div className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 backdrop-blur-sm">
-                <motion.span
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-2 h-2 rounded-full bg-green-500"
-                />
-                <span className="text-sm text-gray-600 flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5" />
+              <div className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-lg bg-[#1e1e24] border border-[#2a2a32]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
+                <span className="text-xs text-[#5a5a66] flex items-center gap-1.5">
+                  <Activity className="w-3 h-3" />
                   All systems active
                 </span>
               </div>
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    avatarBox:
-                      "w-10 h-10 rounded-xl ring-2 ring-indigo-500/20",
-                  },
-                }}
-              />
+              <UserButton afterSignOutUrl="/" />
             </div>
           </div>
         </div>
@@ -131,92 +105,80 @@ export default function Dashboard() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4"
         >
           <div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
-              Welcome back! 👋
+            <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-[#ededef] mb-1 tracking-tight">
+              Welcome back
             </h2>
-            <p className="text-sm sm:text-base text-gray-600">
+            <p className="text-sm text-[#5a5a66]">
               Here&apos;s an overview of your financial activity
             </p>
           </div>
           <CurrencySelector />
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Forms */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="lg:col-span-1 space-y-6"
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="lg:col-span-1 space-y-5"
           >
             {/* Tab Switcher */}
-            <div className="glass-card rounded-2xl p-1.5 sm:p-1.5 flex gap-1 sm:gap-1 overflow-x-auto scrollbar-hide -mx-1 px-1 sm:mx-0">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setActiveTab("expense")}
-                className={`flex-1 min-w-[85px] py-3 sm:py-3 px-2 sm:px-2 rounded-xl font-medium text-xs sm:text-xs transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-1.5 ${
-                  activeTab === "expense"
-                    ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg"
-                    : "text-gray-600 hover:bg-white/50"
-                }`}
-              >
-                <Wallet className="w-4 h-4 sm:w-4 sm:h-4" />
-                <span>Expense</span>
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setActiveTab("income")}
-                className={`flex-1 min-w-[85px] py-3 sm:py-3 px-2 sm:px-2 rounded-xl font-medium text-xs sm:text-xs transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-1.5 ${
-                  activeTab === "income"
-                    ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg"
-                    : "text-gray-600 hover:bg-white/50"
-                }`}
-              >
-                <TrendingUp className="w-4 h-4 sm:w-4 sm:h-4" />
-                <span>Income</span>
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setActiveTab("budget")}
-                className={`flex-1 min-w-[85px] py-3 sm:py-3 px-2 sm:px-2 rounded-xl font-medium text-xs sm:text-xs transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-1.5 ${
-                  activeTab === "budget"
-                    ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg"
-                    : "text-gray-600 hover:bg-white/50"
-                }`}
-              >
-                <Target className="w-4 h-4 sm:w-4 sm:h-4" />
-                <span>Budget</span>
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setActiveTab("categories")}
-                className={`flex-1 min-w-[85px] py-3 sm:py-3 px-2 sm:px-2 rounded-xl font-medium text-xs sm:text-xs transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-1.5 ${
-                  activeTab === "categories"
-                    ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg"
-                    : "text-gray-600 hover:bg-white/50"
-                }`}
-              >
-                <Tags className="w-4 h-4 sm:w-4 sm:h-4" />
-                <span>Categories</span>
-              </motion.button>
+            <div className="bg-[#16161a] border border-[#2a2a32] rounded-xl p-1 flex gap-1 overflow-x-auto scrollbar-hide">
+              {[
+                {
+                  id: "expense" as const,
+                  icon: Wallet,
+                  label: "Expense",
+                  active: "bg-[#c9a96e] text-[#0c0c0e]",
+                },
+                {
+                  id: "income" as const,
+                  icon: TrendingUp,
+                  label: "Income",
+                  active: "bg-[#34d399] text-[#0c0c0e]",
+                },
+                {
+                  id: "budget" as const,
+                  icon: Target,
+                  label: "Budget",
+                  active: "bg-[#60a5fa] text-[#0c0c0e]",
+                },
+                {
+                  id: "categories" as const,
+                  icon: Tags,
+                  label: "Categories",
+                  active: "bg-[#f59e0b] text-[#0c0c0e]",
+                },
+              ].map((tab) => (
+                <motion.button
+                  key={tab.id}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 min-w-[80px] py-2.5 px-2 rounded-lg font-medium text-xs transition-all duration-200 flex items-center justify-center gap-1.5 ${
+                    activeTab === tab.id
+                      ? tab.active
+                      : "text-[#5a5a66] hover:text-[#8b8b96] hover:bg-[#1e1e24]"
+                  }`}
+                >
+                  <tab.icon className="w-3.5 h-3.5" />
+                  <span>{tab.label}</span>
+                </motion.button>
+              ))}
             </div>
 
             {/* Form Card */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
               >
                 {activeTab === "expense" ? (
                   <ExpenseForm onSuccess={handleExpenseAdded} />
@@ -235,8 +197,8 @@ export default function Dashboard() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="lg:col-span-2 space-y-6"
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="lg:col-span-2 space-y-5"
           >
             <AIInsights key={`insights-${refreshTrigger}`} />
             <BudgetOverview

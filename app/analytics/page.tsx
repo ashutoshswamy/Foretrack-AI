@@ -9,7 +9,6 @@ import {
   ArrowLeft,
   TrendingUp,
   TrendingDown,
-  DollarSign,
   Calendar,
   PieChart,
   BarChart3,
@@ -33,44 +32,44 @@ const categoryConfig: {
 } = {
   Food: {
     icon: "🍔",
-    color: "text-orange-600",
-    bgColor: "bg-gradient-to-br from-orange-100 to-red-100",
+    color: "text-orange-400",
+    bgColor: "bg-orange-500/10",
     chartColor: "#f97316",
   },
   Transport: {
     icon: "🚗",
-    color: "text-blue-600",
-    bgColor: "bg-gradient-to-br from-blue-100 to-indigo-100",
+    color: "text-blue-400",
+    bgColor: "bg-blue-500/10",
     chartColor: "#3b82f6",
   },
   Entertainment: {
     icon: "🎬",
-    color: "text-purple-600",
-    bgColor: "bg-gradient-to-br from-purple-100 to-pink-100",
+    color: "text-purple-400",
+    bgColor: "bg-purple-500/10",
     chartColor: "#a855f7",
   },
   Shopping: {
     icon: "🛍️",
-    color: "text-pink-600",
-    bgColor: "bg-gradient-to-br from-pink-100 to-rose-100",
+    color: "text-pink-400",
+    bgColor: "bg-pink-500/10",
     chartColor: "#ec4899",
   },
   Bills: {
     icon: "💡",
-    color: "text-yellow-600",
-    bgColor: "bg-gradient-to-br from-yellow-100 to-orange-100",
+    color: "text-yellow-400",
+    bgColor: "bg-yellow-500/10",
     chartColor: "#eab308",
   },
   Health: {
     icon: "🏥",
-    color: "text-green-600",
-    bgColor: "bg-gradient-to-br from-green-100 to-emerald-100",
+    color: "text-green-400",
+    bgColor: "bg-green-500/10",
     chartColor: "#22c55e",
   },
   Other: {
     icon: "📦",
-    color: "text-gray-600",
-    bgColor: "bg-gradient-to-br from-gray-100 to-slate-100",
+    color: "text-gray-400",
+    bgColor: "bg-gray-500/10",
     chartColor: "#6b7280",
   },
 };
@@ -188,7 +187,6 @@ export default function Analytics() {
     const netSavings = totalIncome - totalExpenses;
     const savingsRate = totalIncome > 0 ? (netSavings / totalIncome) * 100 : 0;
 
-    // Category breakdown
     const categoryBreakdown = filteredExpenses
       .filter((e) => e.transaction_type === "expense")
       .reduce(
@@ -200,7 +198,6 @@ export default function Analytics() {
         {} as Record<string, number>,
       );
 
-    // Daily spending for the period
     const dailySpending = filteredExpenses
       .filter((e) => e.transaction_type === "expense")
       .reduce(
@@ -218,7 +215,6 @@ export default function Analytics() {
           Object.values(dailySpending).length
         : 0;
 
-    // Top spending categories
     const sortedCategories = Object.entries(categoryBreakdown)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5);
@@ -243,14 +239,14 @@ export default function Analytics() {
 
   if (loading) {
     return (
-      <div className="min-h-screen animated-bg flex items-center justify-center">
+      <div className="min-h-screen bg-[#0c0c0e] flex items-center justify-center">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="flex flex-col items-center gap-4"
         >
-          <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
-          <p className="text-gray-600 font-medium">Loading analytics...</p>
+          <Loader2 className="w-8 h-8 text-[#c9a96e] animate-spin" />
+          <p className="text-[#5a5a66] text-sm">Loading analytics...</p>
         </motion.div>
       </div>
     );
@@ -258,20 +254,8 @@ export default function Analytics() {
 
   return (
     <div className="min-h-screen animated-bg">
-      {/* Decorative Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.2 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute -top-40 -right-40 w-80 h-80 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl"
-        />
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.2 }}
-          transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-          className="absolute bottom-40 -left-40 w-80 h-80 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl"
-        />
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[500px] h-[400px] bg-[radial-gradient(ellipse,rgba(201,169,110,0.04),transparent_70%)]" />
       </div>
 
       {/* Header */}
@@ -279,51 +263,39 @@ export default function Analytics() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 glass-card border-b border-white/20"
+        className="relative z-10 bg-[#16161a] border-b border-[#2a2a32]"
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 href="/dashboard"
-                className="p-1.5 sm:p-2 rounded-xl hover:bg-white/50 transition-colors"
+                className="p-1.5 rounded-lg hover:bg-[#1e1e24] transition-colors"
               >
-                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                <ArrowLeft className="w-4 h-4 text-[#8b8b96]" />
               </Link>
               <div className="flex items-center gap-2 sm:gap-3">
-                <motion.div
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg"
-                >
-                  <PiggyBank className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                </motion.div>
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#c9a96e] flex items-center justify-center">
+                  <PiggyBank className="w-4 h-4 text-[#0c0c0e]" />
+                </div>
                 <div>
-                  <h1 className="text-base sm:text-xl font-bold gradient-text">
+                  <h1 className="text-sm sm:text-base font-semibold text-[#ededef] tracking-tight">
                     Analytics
                   </h1>
-                  <p className="text-[10px] sm:text-xs text-gray-500 hidden sm:block">
+                  <p className="text-[10px] text-[#5a5a66] hidden sm:block uppercase tracking-wide">
                     Financial Insights
                   </p>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 backdrop-blur-sm">
-                <Activity className="w-4 h-4 text-indigo-600" />
-                <span className="text-sm text-gray-600">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg bg-[#1e1e24] border border-[#2a2a32]">
+                <Activity className="w-3.5 h-3.5 text-[#c9a96e]" />
+                <span className="text-xs text-[#5a5a66]">
                   {analytics.transactionCount} transactions
                 </span>
               </div>
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    avatarBox:
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-xl ring-2 ring-indigo-500/20",
-                  },
-                }}
-              />
+              <UserButton afterSignOutUrl="/" />
             </div>
           </div>
         </div>
@@ -339,29 +311,27 @@ export default function Analytics() {
           className="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
         >
           <div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
-              Financial Overview 📊
+            <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-[#ededef] mb-1 tracking-tight">
+              Financial Overview
             </h2>
-            <p className="text-sm sm:text-base text-gray-600">
+            <p className="text-sm text-[#5a5a66]">
               Analyze your spending patterns and track your financial health
             </p>
           </div>
-          <div className="glass-card rounded-xl p-1 flex gap-1 overflow-x-auto scrollbar-hide -mx-1 px-1 sm:mx-0">
+          <div className="bg-[#16161a] border border-[#2a2a32] rounded-xl p-1 flex gap-1 overflow-x-auto scrollbar-hide">
             {(["week", "month", "quarter", "year"] as TimeRange[]).map(
               (range) => (
-                <motion.button
+                <button
                   key={range}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   onClick={() => setTimeRange(range)}
-                  className={`flex-1 min-w-[70px] px-3 sm:px-4 py-2 sm:py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-300 capitalize whitespace-nowrap ${
+                  className={`flex-1 min-w-[65px] px-3 py-2 rounded-lg font-medium text-xs transition-all duration-200 capitalize ${
                     timeRange === range
-                      ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg"
-                      : "text-gray-600 hover:bg-white/50"
+                      ? "bg-[#c9a96e] text-[#0c0c0e]"
+                      : "text-[#5a5a66] hover:text-[#8b8b96] hover:bg-[#1e1e24]"
                   }`}
                 >
                   {range}
-                </motion.button>
+                </button>
               ),
             )}
           </div>
@@ -375,85 +345,79 @@ export default function Analytics() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8"
         >
           {/* Total Expenses */}
-          <div className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-red-100 to-pink-100 flex items-center justify-center">
-                <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
+          <div className="bg-[#16161a] border border-[#2a2a32] rounded-xl p-4 sm:p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-9 h-9 rounded-lg bg-[#f87171]/10 flex items-center justify-center">
+                <TrendingDown className="w-4 h-4 text-[#f87171]" />
               </div>
               <div
-                className={`flex items-center gap-0.5 sm:gap-1 text-xs sm:text-sm font-medium ${
+                className={`flex items-center gap-0.5 text-xs font-medium ${
                   analytics.expenseChange > 0
-                    ? "text-red-600"
-                    : "text-green-600"
+                    ? "text-[#f87171]"
+                    : "text-[#34d399]"
                 }`}
               >
                 {analytics.expenseChange > 0 ? (
-                  <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <ArrowUpRight className="w-3 h-3" />
                 ) : (
-                  <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <ArrowDownRight className="w-3 h-3" />
                 )}
                 {Math.abs(analytics.expenseChange).toFixed(1)}%
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">
-              Total Expenses
-            </p>
-            <p className="text-lg sm:text-2xl font-bold text-gray-900">
+            <p className="text-xs text-[#5a5a66] mb-0.5">Total Expenses</p>
+            <p className="text-lg font-bold text-[#ededef]">
               {formatAmount(analytics.totalExpenses)}
             </p>
           </div>
 
           {/* Total Income */}
-          <div className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
+          <div className="bg-[#16161a] border border-[#2a2a32] rounded-xl p-4 sm:p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-9 h-9 rounded-lg bg-[#34d399]/10 flex items-center justify-center">
+                <TrendingUp className="w-4 h-4 text-[#34d399]" />
               </div>
               <div
-                className={`flex items-center gap-0.5 sm:gap-1 text-xs sm:text-sm font-medium ${
+                className={`flex items-center gap-0.5 text-xs font-medium ${
                   analytics.incomeChange >= 0
-                    ? "text-green-600"
-                    : "text-red-600"
+                    ? "text-[#34d399]"
+                    : "text-[#f87171]"
                 }`}
               >
                 {analytics.incomeChange >= 0 ? (
-                  <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <ArrowUpRight className="w-3 h-3" />
                 ) : (
-                  <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <ArrowDownRight className="w-3 h-3" />
                 )}
                 {Math.abs(analytics.incomeChange).toFixed(1)}%
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">
-              Total Income
-            </p>
-            <p className="text-lg sm:text-2xl font-bold text-gray-900">
+            <p className="text-xs text-[#5a5a66] mb-0.5">Total Income</p>
+            <p className="text-lg font-bold text-[#ededef]">
               {formatAmount(analytics.totalIncome)}
             </p>
           </div>
 
           {/* Net Savings */}
-          <div className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-                <Wallet className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600" />
+          <div className="bg-[#16161a] border border-[#2a2a32] rounded-xl p-4 sm:p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-9 h-9 rounded-lg bg-[#c9a96e]/10 flex items-center justify-center">
+                <Wallet className="w-4 h-4 text-[#c9a96e]" />
               </div>
-              <div
-                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium ${
+              <span
+                className={`px-2 py-0.5 rounded-md text-[10px] font-medium ${
                   analytics.netSavings >= 0
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
+                    ? "bg-[#34d399]/10 text-[#34d399]"
+                    : "bg-[#f87171]/10 text-[#f87171]"
                 }`}
               >
                 {analytics.netSavings >= 0 ? "Surplus" : "Deficit"}
-              </div>
+              </span>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">
-              Net Savings
-            </p>
+            <p className="text-xs text-[#5a5a66] mb-0.5">Net Savings</p>
             <p
-              className={`text-lg sm:text-2xl font-bold ${
-                analytics.netSavings >= 0 ? "text-green-600" : "text-red-600"
+              className={`text-lg font-bold ${
+                analytics.netSavings >= 0 ? "text-[#34d399]" : "text-[#f87171]"
               }`}
             >
               {formatAmount(Math.abs(analytics.netSavings))}
@@ -461,19 +425,17 @@ export default function Analytics() {
           </div>
 
           {/* Savings Rate */}
-          <div className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-amber-100 to-yellow-100 flex items-center justify-center">
-                <Target className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" />
+          <div className="bg-[#16161a] border border-[#2a2a32] rounded-xl p-4 sm:p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-9 h-9 rounded-lg bg-[#fbbf24]/10 flex items-center justify-center">
+                <Target className="w-4 h-4 text-[#fbbf24]" />
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 mb-0.5 sm:mb-1">
-              Savings Rate
-            </p>
-            <p className="text-lg sm:text-2xl font-bold text-gray-900">
+            <p className="text-xs text-[#5a5a66] mb-0.5">Savings Rate</p>
+            <p className="text-lg font-bold text-[#ededef]">
               {analytics.savingsRate.toFixed(1)}%
             </p>
-            <div className="mt-1.5 sm:mt-2 h-1.5 sm:h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="mt-2 h-1.5 bg-[#2a2a32] rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{
@@ -482,33 +444,33 @@ export default function Analytics() {
                 transition={{ duration: 1, ease: "easeOut" }}
                 className={`h-full rounded-full ${
                   analytics.savingsRate >= 20
-                    ? "bg-gradient-to-r from-green-500 to-emerald-500"
+                    ? "bg-[#34d399]"
                     : analytics.savingsRate >= 10
-                      ? "bg-gradient-to-r from-amber-500 to-yellow-500"
-                      : "bg-gradient-to-r from-red-500 to-pink-500"
+                      ? "bg-[#fbbf24]"
+                      : "bg-[#f87171]"
                 }`}
               />
             </div>
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
           {/* Category Breakdown */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="glass-card rounded-2xl p-6"
+            className="bg-[#16161a] border border-[#2a2a32] rounded-xl p-5"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                <PieChart className="w-5 h-5 text-white" />
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-9 h-9 rounded-lg bg-[#c9a96e]/10 flex items-center justify-center">
+                <PieChart className="w-4 h-4 text-[#c9a96e]" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900">
+                <h3 className="font-semibold text-[#ededef] text-sm">
                   Spending by Category
                 </h3>
-                <p className="text-sm text-gray-500">Where your money goes</p>
+                <p className="text-xs text-[#5a5a66]">Where your money goes</p>
               </div>
             </div>
 
@@ -525,35 +487,35 @@ export default function Analytics() {
                   return (
                     <motion.div
                       key={category}
-                      initial={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      transition={{ duration: 0.3, delay: index * 0.08 }}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2.5">
                           <span
-                            className={`w-10 h-10 rounded-xl ${config.bgColor} flex items-center justify-center text-lg`}
+                            className={`w-8 h-8 rounded-lg ${config.bgColor} flex items-center justify-center text-sm`}
                           >
                             {config.icon}
                           </span>
-                          <span className="font-medium text-gray-900">
+                          <span className="font-medium text-[#ededef] text-sm">
                             {category}
                           </span>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-gray-900">
+                          <p className="font-semibold text-[#ededef] text-sm">
                             {formatAmount(amount)}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-[10px] text-[#5a5a66]">
                             {percentage.toFixed(1)}%
                           </p>
                         </div>
                       </div>
-                      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-[#2a2a32] rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${percentage}%` }}
-                          transition={{ duration: 0.8, delay: index * 0.1 }}
+                          transition={{ duration: 0.8, delay: index * 0.08 }}
                           className="h-full rounded-full"
                           style={{ backgroundColor: config.chartColor }}
                         />
@@ -563,9 +525,9 @@ export default function Analytics() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-12 text-gray-500">
-                <PieChart className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                <p>No expense data for this period</p>
+              <div className="text-center py-10 text-[#5a5a66]">
+                <PieChart className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                <p className="text-sm">No expense data for this period</p>
               </div>
             )}
           </motion.div>
@@ -575,15 +537,17 @@ export default function Analytics() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="glass-card rounded-2xl p-6"
+            className="bg-[#16161a] border border-[#2a2a32] rounded-xl p-5"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                <Target className="w-5 h-5 text-white" />
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-9 h-9 rounded-lg bg-[#34d399]/10 flex items-center justify-center">
+                <Target className="w-4 h-4 text-[#34d399]" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900">Budget Status</h3>
-                <p className="text-sm text-gray-500">
+                <h3 className="font-semibold text-[#ededef] text-sm">
+                  Budget Status
+                </h3>
+                <p className="text-xs text-[#5a5a66]">
                   Track your budget limits
                 </p>
               </div>
@@ -591,33 +555,32 @@ export default function Analytics() {
 
             {budgets.length > 0 ? (
               <div className="space-y-4">
-                {/* Overall Budget */}
-                <div className="p-4 rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="font-medium text-gray-900">
+                <div className="p-4 rounded-xl bg-[#c9a96e]/5 border border-[#c9a96e]/15">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium text-[#ededef] text-sm">
                       Overall Budget
                     </span>
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      className={`px-2 py-0.5 rounded-md text-[10px] font-medium ${
                         budgetUtilization <= 80
-                          ? "bg-green-100 text-green-700"
+                          ? "bg-[#34d399]/10 text-[#34d399]"
                           : budgetUtilization <= 100
-                            ? "bg-amber-100 text-amber-700"
-                            : "bg-red-100 text-red-700"
+                            ? "bg-[#fbbf24]/10 text-[#fbbf24]"
+                            : "bg-[#f87171]/10 text-[#f87171]"
                       }`}
                     >
                       {budgetUtilization.toFixed(0)}% used
                     </span>
                   </div>
                   <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-2xl font-bold text-gray-900">
+                    <span className="text-xl font-bold text-[#ededef]">
                       {formatAmount(analytics.totalExpenses)}
                     </span>
-                    <span className="text-gray-500">
+                    <span className="text-[#5a5a66] text-sm">
                       / {formatAmount(totalBudget)}
                     </span>
                   </div>
-                  <div className="h-3 bg-white rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#2a2a32] rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{
@@ -626,16 +589,15 @@ export default function Analytics() {
                       transition={{ duration: 1, ease: "easeOut" }}
                       className={`h-full rounded-full ${
                         budgetUtilization <= 80
-                          ? "bg-gradient-to-r from-green-500 to-emerald-500"
+                          ? "bg-[#34d399]"
                           : budgetUtilization <= 100
-                            ? "bg-gradient-to-r from-amber-500 to-yellow-500"
-                            : "bg-gradient-to-r from-red-500 to-pink-500"
+                            ? "bg-[#fbbf24]"
+                            : "bg-[#f87171]"
                       }`}
                     />
                   </div>
                 </div>
 
-                {/* Individual Budgets */}
                 {budgets.slice(0, 4).map((budget, index) => {
                   const spent =
                     analytics.categoryBreakdown[budget.category] || 0;
@@ -647,34 +609,33 @@ export default function Analytics() {
                   return (
                     <motion.div
                       key={budget.id}
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
-                      className="flex items-center gap-4"
+                      className="flex items-center gap-3"
                     >
                       <span
-                        className={`w-10 h-10 rounded-xl ${config.bgColor} flex items-center justify-center text-lg flex-shrink-0`}
+                        className={`w-8 h-8 rounded-lg ${config.bgColor} flex items-center justify-center text-sm flex-shrink-0`}
                       >
                         {config.icon}
                       </span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="font-medium text-gray-900 truncate">
+                          <span className="font-medium text-[#ededef] text-sm truncate">
                             {budget.category}
                           </span>
-                          <span className="text-sm text-gray-500">
-                            {formatAmount(spent)} /{" "}
-                            {formatAmount(budget.amount)}
+                          <span className="text-xs text-[#5a5a66]">
+                            {formatAmount(spent)} / {formatAmount(budget.amount)}
                           </span>
                         </div>
-                        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-1.5 bg-[#2a2a32] rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all duration-500 ${
                               utilization <= 80
-                                ? "bg-green-500"
+                                ? "bg-[#34d399]"
                                 : utilization <= 100
-                                  ? "bg-amber-500"
-                                  : "bg-red-500"
+                                  ? "bg-[#fbbf24]"
+                                  : "bg-[#f87171]"
                             }`}
                             style={{
                               width: `${Math.min(utilization, 100)}%`,
@@ -687,15 +648,15 @@ export default function Analytics() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-12 text-gray-500">
-                <Target className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                <p>No budgets set up yet</p>
+              <div className="text-center py-10 text-[#5a5a66]">
+                <Target className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                <p className="text-sm">No budgets set up yet</p>
                 <Link
                   href="/dashboard"
-                  className="inline-flex items-center gap-2 mt-4 text-indigo-600 hover:text-indigo-700 font-medium"
+                  className="inline-flex items-center gap-1 mt-3 text-[#c9a96e] hover:text-[#d4b87e] text-sm font-medium"
                 >
                   Create a budget
-                  <ArrowUpRight className="w-4 h-4" />
+                  <ArrowUpRight className="w-3 h-3" />
                 </Link>
               </div>
             )}
@@ -707,47 +668,59 @@ export default function Analytics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="glass-card rounded-2xl p-6"
+          className="bg-[#16161a] border border-[#2a2a32] rounded-xl p-5"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-              <BarChart3 className="w-5 h-5 text-white" />
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-lg bg-[#fbbf24]/10 flex items-center justify-center">
+              <BarChart3 className="w-4 h-4 text-[#fbbf24]" />
             </div>
             <div>
-              <h3 className="font-bold text-gray-900">Quick Insights</h3>
-              <p className="text-sm text-gray-500">Key metrics at a glance</p>
+              <h3 className="font-semibold text-[#ededef] text-sm">
+                Quick Insights
+              </h3>
+              <p className="text-xs text-[#5a5a66]">Key metrics at a glance</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center p-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50">
-              <Calendar className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">
-                {formatAmount(analytics.avgDailySpending)}
-              </p>
-              <p className="text-sm text-gray-500">Avg. Daily Spending</p>
-            </div>
-            <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-50 to-pink-50">
-              <Activity className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">
-                {analytics.transactionCount}
-              </p>
-              <p className="text-sm text-gray-500">Transactions</p>
-            </div>
-            <div className="text-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50">
-              <DollarSign className="w-8 h-8 text-green-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">
-                {Object.keys(analytics.categoryBreakdown).length}
-              </p>
-              <p className="text-sm text-gray-500">Active Categories</p>
-            </div>
-            <div className="text-center p-4 rounded-xl bg-gradient-to-br from-amber-50 to-yellow-50">
-              <Target className="w-8 h-8 text-amber-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">
-                {budgets.length}
-              </p>
-              <p className="text-sm text-gray-500">Active Budgets</p>
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              {
+                icon: Calendar,
+                value: formatAmount(analytics.avgDailySpending),
+                label: "Avg. Daily Spending",
+                color: "#60a5fa",
+              },
+              {
+                icon: Activity,
+                value: analytics.transactionCount.toString(),
+                label: "Transactions",
+                color: "#a855f7",
+              },
+              {
+                icon: PieChart,
+                value: Object.keys(analytics.categoryBreakdown).length.toString(),
+                label: "Active Categories",
+                color: "#34d399",
+              },
+              {
+                icon: Target,
+                value: budgets.length.toString(),
+                label: "Active Budgets",
+                color: "#fbbf24",
+              },
+            ].map((stat, index) => (
+              <div
+                key={index}
+                className="text-center p-4 rounded-xl bg-[#1e1e24] border border-[#2a2a32]"
+              >
+                <stat.icon
+                  className="w-6 h-6 mx-auto mb-2"
+                  style={{ color: stat.color }}
+                />
+                <p className="text-lg font-bold text-[#ededef]">{stat.value}</p>
+                <p className="text-xs text-[#5a5a66]">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </motion.div>
       </main>

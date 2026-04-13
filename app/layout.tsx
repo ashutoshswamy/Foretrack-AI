@@ -1,14 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Poppins } from "next/font/google";
+import { Outfit, Playfair_Display } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { CurrencyProvider } from "@/lib/currency";
 import Script from "next/script";
 import "./globals.css";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const viewport: Viewport = {
@@ -16,10 +23,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafbfc" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
-  ],
+  themeColor: "#0c0c0e",
 };
 
 export const metadata: Metadata = {
@@ -130,8 +134,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "#c9a96e",
+          colorBackground: "#16161a",
+          colorInputBackground: "#1e1e24",
+          colorInputText: "#ededef",
+          borderRadius: "10px",
+        },
+      }}
+    >
+      <html lang="en" className="dark">
         <head>
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-PYSDSRJXHN"
@@ -150,7 +165,9 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           />
         </head>
-        <body className={`${poppins.variable} font-sans antialiased`}>
+        <body
+          className={`${outfit.variable} ${playfair.variable} font-sans antialiased`}
+        >
           <CurrencyProvider>{children}</CurrencyProvider>
         </body>
       </html>
