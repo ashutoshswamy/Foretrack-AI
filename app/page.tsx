@@ -72,6 +72,7 @@ export default function Home() {
           <SignedOut>
             <div className="flex items-center gap-3 sm:gap-4">
               <Link
+                id="nav-link-signin"
                 href="/sign-in"
                 className="text-sm text-[#8b8b96] hover:text-[#c9a96e] font-medium transition-colors duration-200"
               >
@@ -82,6 +83,7 @@ export default function Home() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Link
+                  id="nav-link-signup"
                   href="/sign-up"
                   className="btn-primary text-sm px-4 py-2 sm:px-5 sm:py-2.5"
                 >
@@ -94,6 +96,7 @@ export default function Home() {
           <SignedIn>
             <div className="flex items-center gap-4">
               <Link
+                id="nav-link-dashboard"
                 href="/dashboard"
                 className="inline-flex items-center gap-2 text-sm text-[#8b8b96] hover:text-[#c9a96e] font-medium transition-colors duration-200"
               >
@@ -112,7 +115,7 @@ export default function Home() {
       </motion.nav>
 
       {/* Hero Section */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-24">
+      <main id="main-content" className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-24">
         <motion.div
           variants={container}
           initial="hidden"
@@ -153,6 +156,7 @@ export default function Home() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Link
+                  id="hero-link-signup"
                   href="/sign-up"
                   className="group inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-sm sm:text-base shadow-lg shadow-[#c9a96e]/20 hover:shadow-xl hover:shadow-[#c9a96e]/25 transition-all duration-300"
                 >
@@ -165,6 +169,7 @@ export default function Home() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Link
+                  id="hero-link-signin"
                   href="/sign-in"
                   className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 bg-[#16161a] text-[#ededef] rounded-xl font-semibold text-sm sm:text-base border border-[#2a2a32] hover:border-[#c9a96e]/40 transition-all duration-300"
                 >
@@ -179,6 +184,7 @@ export default function Home() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Link
+                  id="hero-link-dashboard"
                   href="/dashboard"
                   className="group inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-base shadow-lg shadow-[#c9a96e]/20 transition-all duration-300"
                 >
@@ -442,6 +448,7 @@ export default function Home() {
                   whileTap={{ scale: 0.98 }}
                 >
                   <Link
+                    id="cta-link-signup"
                     href="/sign-up"
                     className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-base shadow-lg shadow-[#c9a96e]/20 transition-all duration-300"
                   >
@@ -460,6 +467,7 @@ export default function Home() {
                   whileTap={{ scale: 0.98 }}
                 >
                   <Link
+                    id="cta-link-dashboard"
                     href="/dashboard"
                     className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-base shadow-lg shadow-[#c9a96e]/20 transition-all duration-300"
                   >
@@ -474,8 +482,10 @@ export default function Home() {
             </div>
           </div>
         </motion.div>
+      </main>
 
-        {/* Footer */}
+      {/* Footer */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <motion.footer
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

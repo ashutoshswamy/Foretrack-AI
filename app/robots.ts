@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/dashboard/", "/analytics/"],
+        disallow: ["/api/", "/dashboard/", "/analytics/", "/transactions/"],
       },
     ],
     sitemap: "https://foretrackai.in/sitemap.xml",

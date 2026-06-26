@@ -1,8 +1,21 @@
-"use client";
-
+import type { Metadata } from "next";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { PiggyBank, ArrowLeft } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "Learn how Foretrack AI collects, uses, and protects your personal data and financial information. We are committed to safeguarding your privacy.",
+  alternates: {
+    canonical: "https://foretrackai.in/privacy",
+  },
+  openGraph: {
+    title: "Privacy Policy | Foretrack AI",
+    description:
+      "Learn how Foretrack AI protects and manages your personal data and financial records.",
+    url: "https://foretrackai.in/privacy",
+  },
+};
 
 export default function PrivacyPolicy() {
   return (
@@ -29,13 +42,8 @@ export default function PrivacyPolicy() {
       </nav>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="glass-card rounded-3xl p-8 md:p-12"
-        >
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="main-content">
+        <div className="glass-card rounded-3xl p-8 md:p-12 animate-fade-in">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Privacy Policy
           </h1>
@@ -147,8 +155,8 @@ export default function PrivacyPolicy() {
               </p>
             </section>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

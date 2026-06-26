@@ -1,8 +1,21 @@
-"use client";
-
+import type { Metadata } from "next";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { PiggyBank, ArrowLeft } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Cookie Policy",
+  description:
+    "Understand how Foretrack AI uses cookies and tracking technologies to deliver and improve our personal finance services.",
+  alternates: {
+    canonical: "https://foretrackai.in/cookies",
+  },
+  openGraph: {
+    title: "Cookie Policy | Foretrack AI",
+    description:
+      "Understand how Foretrack AI uses cookies and tracking technologies to improve your user experience.",
+    url: "https://foretrackai.in/cookies",
+  },
+};
 
 export default function CookiePolicy() {
   return (
@@ -29,13 +42,8 @@ export default function CookiePolicy() {
       </nav>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="glass-card rounded-3xl p-8 md:p-12"
-        >
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="main-content">
+        <div className="glass-card rounded-3xl p-8 md:p-12 animate-fade-in">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Cookie Policy
           </h1>
@@ -185,8 +193,8 @@ export default function CookiePolicy() {
               </p>
             </section>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
