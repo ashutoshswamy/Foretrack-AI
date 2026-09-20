@@ -188,16 +188,16 @@ NEXT_PUBLIC_FIREBASE_APP_ID=...
    - Never interpolate user input into raw SQL strings — always use `sql\`...\`` tagged templates
    - Sanitize/validate before writing to the database
 
-3. **Node-only packages must stay external to the server bundle**
+3. **`firebase-admin`'s `jose` dependency must stay CJS-compatible**
 
-   `firebase-admin` (via `jwks-rsa` → `jose`) ships an ESM-only build. If Turbopack/webpack bundles it into a server chunk, Node throws `ERR_REQUIRE_ESM` at runtime. Keep it external:
+   `firebase-admin` statically requires `jwks-rsa`, which requires `jose`. `jose@6.x` is ESM-only (no CJS `main`), so `require('jose')` throws `ERR_REQUIRE_ESM` on any Node runtime that doesn't support synchronous `require(esm)` — which is exactly what Vercel's serverless Node runtime hits, even though it may not reproduce on a newer local Node install. Pin `jose` to the last dual-build release:
 
-   ```typescript
-   // next.config.ts
-   const nextConfig: NextConfig = {
-     serverExternalPackages: ["firebase-admin"],
-   };
+   ```jsonc
+   // package.json
+   { "overrides": { "jose": "4.15.9" } }
    ```
+
+   `serverExternalPackages: ["firebase-admin"]` in `next.config.ts` is good practice alongside this, but does not by itself fix the ESM `require()` failure.
 
 4. **Security Headers** (already configured in `next.config.ts`)
 
@@ -305,7 +305,7 @@ Users can request complete data deletion by contacting the maintainer directly.
 ### Deployment
 
 - [ ] All environment variables configured (`DATABASE_URL`, `FIREBASE_*`, `GEMINI_API_KEY`)
-- [ ] `serverExternalPackages: ["firebase-admin"]` set in `next.config.ts`
+- [ ] `overrides.jose` pinned to `4.15.9` in `package.json`
 - [ ] Debug mode disabled
 - [ ] HTTPS enforced
 - [ ] Security headers configured

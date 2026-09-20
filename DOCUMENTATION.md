@@ -533,7 +533,7 @@ npm run lint
 ### Production Checklist
 
 - [ ] Set all environment variables
-- [ ] `serverExternalPackages: ["firebase-admin"]` present in `next.config.ts` (required — see Troubleshooting)
+- [ ] `overrides.jose` pinned to `4.15.9` in `package.json` (required — see Troubleshooting)
 - [ ] Add the production domain to Firebase Console → Authentication → Settings → Authorized domains
 - [ ] Neon connection string uses `sslmode=require`
 - [ ] Configure custom domain
@@ -544,21 +544,27 @@ npm run lint
 
 ### `ERR_REQUIRE_ESM` / "Failed to load external module firebase-admin.../auth" in production
 
-`firebase-admin`'s auth module pulls in `jwks-rsa` → `jose`, and `jose` ships an ESM-only build. If the bundler (Turbopack or webpack) inlines `firebase-admin` into a server chunk, Node tries to `require()` that ESM module and throws:
+`firebase-admin/lib/utils/jwt.js` does a static, top-level `require('jwks-rsa')`, and `jwks-rsa@4.x` does `require('jose')`. `jose@6.x` ships **ESM-only** — no CJS `main` — so any CJS `require('jose')` throws:
 
 ```
 Error [ERR_REQUIRE_ESM]: require() of ES Module .../jose/dist/webapi/index.js
 from .../jwks-rsa/src/utils.js not supported.
 ```
 
-**Fix**: mark the package external so Next loads it natively via `require()`/`import()` from `node_modules` at runtime instead of bundling it:
+This isn't a bundling artifact — it fails in plain Node too, on any Node version that doesn't support synchronous `require(esm)` (stabilized in Node 22.12+/23+). Newer local Node versions swallow it silently, which is why it can pass `next build` and `npm run dev` locally and only surface once deployed to a Vercel function running an older Node runtime. `serverExternalPackages` does not fix this — it only changes whether the bundler inlines the package, not whether `require()` can load an ESM-only dependency.
 
-```typescript
-// next.config.ts
-const nextConfig: NextConfig = {
-  serverExternalPackages: ["firebase-admin"],
-};
+**Fix**: pin `jose` to the last dual CJS/ESM release via an npm override — `jwks-rsa` only calls `jose.importJWK` / `jose.exportSPKI`, both present in v4's API:
+
+```jsonc
+// package.json
+{
+  "overrides": {
+    "jose": "4.15.9"
+  }
+}
 ```
+
+Run `npm install` after adding it, and verify with `node -e "require('firebase-admin/auth')"` — it should resolve without throwing on any Node version. Keeping `serverExternalPackages: ["firebase-admin"]` in `next.config.ts` alongside this is still fine practice, just not the fix for this specific error.
 
 ### "Unauthorized" errors
 
