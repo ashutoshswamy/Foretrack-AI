@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { useUser, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -24,12 +24,12 @@ import {
   ChevronRight,
 } from "lucide-react";
 import {
-  supabase,
   type Expense,
   type Income,
   type IncomeSource,
-} from "@/lib/supabase";
+} from "@/lib/types";
 import { useCurrency } from "@/lib/currency";
+import AccountMenu from "@/components/AccountMenu";
 
 type Transaction = {
   id: string;
@@ -82,7 +82,7 @@ const incomeSources: IncomeSource[] = [
 ];
 
 export default function Transactions() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { formatAmount } = useCurrency();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [incomes, setIncomes] = useState<Income[]>([]);
@@ -114,20 +114,11 @@ export default function Transactions() {
 
     try {
       const [expensesRes, incomesRes] = await Promise.all([
-        supabase
-          .from("expenses")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("date", { ascending: false }),
-        supabase
-          .from("incomes")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("date", { ascending: false }),
+        fetch("/api/expenses"),
+        fetch("/api/incomes"),
       ]);
-
-      if (expensesRes.data) setExpenses(expensesRes.data);
-      if (incomesRes.data) setIncomes(incomesRes.data);
+      if (expensesRes.ok) setExpenses(await expensesRes.json());
+      if (incomesRes.ok) setIncomes(await incomesRes.json());
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -204,9 +195,9 @@ export default function Transactions() {
     if (!confirm("Are you sure you want to delete this transaction?")) return;
     setDeletingId(transaction.id);
     try {
-      const table = transaction.type === "expense" ? "expenses" : "incomes";
-      const { error } = await supabase.from(table).delete().eq("id", transaction.id);
-      if (error) throw error;
+      const endpoint = transaction.type === "expense" ? "expenses" : "incomes";
+      const response = await fetch(`/api/${endpoint}/${transaction.id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete");
       fetchData();
     } catch (error) {
       console.error("Error deleting transaction:", error);
@@ -236,19 +227,25 @@ export default function Transactions() {
     if (!user || !editingTransaction) return;
     setSaving(true);
     try {
-      if (editingTransaction.type === "expense") {
-        const { error } = await supabase.from("expenses").update({
-          amount: parseFloat(editForm.amount), category: editForm.category,
-          description: editForm.description || null, date: editForm.date,
-        }).eq("id", editingTransaction.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.from("incomes").update({
-          amount: parseFloat(editForm.amount), source: editForm.source,
-          description: editForm.description || null, date: editForm.date,
-        }).eq("id", editingTransaction.id);
-        if (error) throw error;
-      }
+      const response =
+        editingTransaction.type === "expense"
+          ? await fetch(`/api/expenses/${editingTransaction.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                amount: parseFloat(editForm.amount), category: editForm.category,
+                description: editForm.description || null, date: editForm.date,
+              }),
+            })
+          : await fetch(`/api/incomes/${editingTransaction.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                amount: parseFloat(editForm.amount), source: editForm.source,
+                description: editForm.description || null, date: editForm.date,
+              }),
+            });
+      if (!response.ok) throw new Error("Failed to update");
       cancelEditing();
       fetchData();
     } catch (error) {
@@ -310,7 +307,7 @@ export default function Transactions() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 bg-[#16161a] border-b border-[#2a2a32]"
+        className="relative z-20 bg-[#16161a] border-b border-[#2a2a32]"
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex justify-between items-center">
@@ -337,7 +334,7 @@ export default function Transactions() {
                   {filteredAndSortedTransactions.length} transactions
                 </span>
               </div>
-              <UserButton afterSignOutUrl="/" />
+              <AccountMenu />
             </div>
           </div>
         </div>

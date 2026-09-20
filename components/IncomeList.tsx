@@ -3,8 +3,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TrendingUp, Trash2, Package, Pencil, X, Check, Loader2 } from "lucide-react";
-import { supabase, type Income, type IncomeSource } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
+import { type Income, type IncomeSource } from "@/lib/types";
+import { useAuth } from "@/lib/auth-context";
 import { useCurrency } from "@/lib/currency";
 
 type IncomeListProps = { refreshTrigger?: number; onUpdate?: () => void; };
@@ -23,7 +23,7 @@ const sourceConfig: { [key: string]: { icon: string; color: string; bgColor: str
 const incomeSources: IncomeSource[] = ["Salary", "Freelance", "Business", "Investments", "Rental", "Gifts", "Refunds", "Other"];
 
 export default function IncomeList({ refreshTrigger, onUpdate }: IncomeListProps) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { formatAmount, currency } = useCurrency();
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,9 +34,9 @@ export default function IncomeList({ refreshTrigger, onUpdate }: IncomeListProps
   const fetchIncomes = useCallback(async () => {
     if (!user) return;
     try {
-      const { data, error } = await supabase.from("incomes").select("*").eq("user_id", user.id).order("date", { ascending: false }).limit(10);
-      if (error) throw error;
-      setIncomes(data || []);
+      const response = await fetch("/api/incomes?limit=10");
+      if (!response.ok) throw new Error("Failed to fetch incomes");
+      setIncomes(await response.json());
     } catch (error) { console.error("Error fetching incomes:", error); } finally { setLoading(false); }
   }, [user]);
 
@@ -45,8 +45,8 @@ export default function IncomeList({ refreshTrigger, onUpdate }: IncomeListProps
   const deleteIncome = async (id: string) => {
     if (!confirm("Are you sure you want to delete this income?")) return;
     try {
-      const { error } = await supabase.from("incomes").delete().eq("id", id);
-      if (error) throw error;
+      const response = await fetch(`/api/incomes/${id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete");
       fetchIncomes(); onUpdate?.();
     } catch (error) { console.error("Error deleting income:", error); alert("Failed to delete income"); }
   };
@@ -60,10 +60,14 @@ export default function IncomeList({ refreshTrigger, onUpdate }: IncomeListProps
   const saveEdit = async (id: string) => {
     if (!user) return; setSaving(true);
     try {
-      const { error } = await supabase.from("incomes").update({
-        amount: parseFloat(editForm.amount), source: editForm.source, description: editForm.description, date: editForm.date,
-      }).eq("id", id);
-      if (error) throw error;
+      const response = await fetch(`/api/incomes/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: parseFloat(editForm.amount), source: editForm.source, description: editForm.description, date: editForm.date,
+        }),
+      });
+      if (!response.ok) throw new Error("Failed to update");
       setEditingId(null); fetchIncomes(); onUpdate?.();
     } catch (error) { console.error("Error updating income:", error); alert("Failed to update income"); } finally { setSaving(false); }
   };

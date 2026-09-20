@@ -1,21 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Outfit, Playfair_Display } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
+import { DM_Sans } from "next/font/google";
+import { AuthProvider } from "@/lib/auth-context";
 import { CurrencyProvider } from "@/lib/currency";
 import Script from "next/script";
 import "./globals.css";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 export const viewport: Viewport = {
@@ -72,6 +65,21 @@ export const metadata: Metadata = {
     title: "Foretrack AI - Smart Expense Tracking & Budget Management",
     description:
       "Take control of your finances with AI-powered expense tracking, smart budgeting, and personalized financial insights. Join 50K+ users saving smarter!",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1730,
+        height: 909,
+        alt: "Foretrack AI - Smart Expense Tracking & Budget Management",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Foretrack AI - Smart Expense Tracking & Budget Management",
+    description:
+      "Take control of your finances with AI-powered expense tracking, smart budgeting, and personalized financial insights.",
+    images: ["/og-image.png"],
   },
   alternates: {
     canonical: "https://foretrackai.in",
@@ -134,43 +142,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: dark,
-        variables: {
-          colorPrimary: "#c9a96e",
-          colorBackground: "#16161a",
-          colorInputBackground: "#1e1e24",
-          colorInputText: "#ededef",
-          borderRadius: "10px",
-        },
-      }}
-    >
-      <html lang="en" className="dark">
-        <head>
-          <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-PYSDSRJXHN"
-            strategy="afterInteractive"
-          />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
+    <html lang="en" className="dark">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-PYSDSRJXHN"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'G-PYSDSRJXHN');
             `}
-          </Script>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-          />
-        </head>
-        <body
-          className={`${outfit.variable} ${playfair.variable} font-sans antialiased`}
-        >
+        </Script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body
+        className={`${dmSans.variable} font-sans antialiased`}
+      >
+        <AuthProvider>
           <CurrencyProvider>{children}</CurrencyProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }

@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     description:
       "Understand how Foretrack AI uses cookies and tracking technologies to improve your user experience.",
     url: "https://foretrackai.in/cookies",
+    images: [
+      { url: "/og-image.png", width: 1730, height: 909, alt: "Foretrack AI" },
+    ],
   },
 };
 
@@ -24,8 +27,8 @@ export default function CookiePolicy() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
-              <PiggyBank className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-[#c9a96e] flex items-center justify-center shadow-lg">
+              <PiggyBank className="w-5 h-5 text-[#0c0c0e]" />
             </div>
             <span className="text-xl font-bold gradient-text">
               Foretrack AI
@@ -33,7 +36,7 @@ export default function CookiePolicy() {
           </Link>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition-colors"
+            className="inline-flex items-center gap-2 text-[#8b8b96] hover:text-[#c9a96e] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -44,17 +47,17 @@ export default function CookiePolicy() {
       {/* Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="main-content">
         <div className="glass-card rounded-3xl p-8 md:p-12 animate-fade-in">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-[#ededef] mb-2">
             Cookie Policy
           </h1>
-          <p className="text-gray-500 mb-8">Last updated: February 1, 2026</p>
+          <p className="text-[#5a5a66] mb-8">Last updated: February 1, 2026</p>
 
-          <div className="prose prose-gray max-w-none">
+          <div className="max-w-none">
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 1. What Are Cookies?
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 Cookies are small text files that are stored on your device when
                 you visit a website. They help websites remember your
                 preferences and improve your browsing experience.
@@ -62,13 +65,13 @@ export default function CookiePolicy() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 2. How We Use Cookies
               </h2>
-              <p className="text-gray-600 leading-relaxed mb-4">
+              <p className="text-[#8b8b96] leading-relaxed mb-4">
                 Foretrack AI uses cookies for the following purposes:
               </p>
-              <ul className="list-disc list-inside text-gray-600 space-y-2">
+              <ul className="list-disc list-inside text-[#8b8b96] space-y-2">
                 <li>
                   <strong>Authentication:</strong> To keep you signed in and
                   secure your session
@@ -85,15 +88,15 @@ export default function CookiePolicy() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 3. Types of Cookies We Use
               </h2>
 
               <div className="mb-6">
-                <h3 className="text-xl font-medium text-gray-800 mb-2">
+                <h3 className="text-xl font-medium text-[#c9a96e] mb-2">
                   Essential Cookies
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-[#8b8b96] leading-relaxed">
                   These cookies are necessary for the application to function
                   properly. They enable core functionality such as user
                   authentication and session management. These cannot be
@@ -102,10 +105,10 @@ export default function CookiePolicy() {
               </div>
 
               <div className="mb-6">
-                <h3 className="text-xl font-medium text-gray-800 mb-2">
+                <h3 className="text-xl font-medium text-[#c9a96e] mb-2">
                   Functional Cookies
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-[#8b8b96] leading-relaxed">
                   These cookies remember your preferences and choices to provide
                   a more personalized experience, such as your preferred
                   currency and display settings.
@@ -113,10 +116,10 @@ export default function CookiePolicy() {
               </div>
 
               <div className="mb-6">
-                <h3 className="text-xl font-medium text-gray-800 mb-2">
+                <h3 className="text-xl font-medium text-[#c9a96e] mb-2">
                   Analytics Cookies
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-[#8b8b96] leading-relaxed">
                   These cookies help us understand how visitors interact with
                   our application by collecting and reporting information
                   anonymously. This helps us improve our services.
@@ -125,16 +128,16 @@ export default function CookiePolicy() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 4. Third-Party Cookies
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 We use trusted third-party services that may set their own
                 cookies:
               </p>
-              <ul className="list-disc list-inside text-gray-600 space-y-2 mt-4">
+              <ul className="list-disc list-inside text-[#8b8b96] space-y-2 mt-4">
                 <li>
-                  <strong>Clerk:</strong> For authentication and user management
+                  <strong>Firebase:</strong> For authentication and user management
                 </li>
                 <li>
                   <strong>Vercel:</strong> For hosting and analytics
@@ -143,10 +146,10 @@ export default function CookiePolicy() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 5. Managing Cookies
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 Most web browsers allow you to control cookies through their
                 settings. You can usually find these settings in the
                 &ldquo;Options&rdquo; or &ldquo;Preferences&rdquo; menu of your
@@ -156,10 +159,10 @@ export default function CookiePolicy() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 6. Cookie Retention
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 Session cookies are deleted when you close your browser.
                 Persistent cookies remain on your device for a set period or
                 until you delete them. Authentication cookies typically expire
@@ -168,25 +171,25 @@ export default function CookiePolicy() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 7. Updates to This Policy
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 We may update this Cookie Policy from time to time. Any changes
                 will be posted on this page with an updated revision date.
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 8. Contact Us
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 If you have any questions about our use of cookies, please
                 contact us at{" "}
                 <a
                   href="mailto:ashutoshswamy397@gmail.com"
-                  className="text-indigo-600 hover:underline"
+                  className="text-[#c9a96e] hover:text-[#d4b87e] hover:underline"
                 >
                   ashutoshswamy397@gmail.com
                 </a>

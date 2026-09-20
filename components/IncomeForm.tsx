@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Loader2, Calendar, TrendingUp } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/lib/auth-context";
 import { useCurrency } from "@/lib/currency";
 
 type IncomeFormProps = {
@@ -23,7 +22,7 @@ const incomeSources = [
 ];
 
 export default function IncomeForm({ onSuccess }: IncomeFormProps) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { currency } = useCurrency();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -35,11 +34,15 @@ export default function IncomeForm({ onSuccess }: IncomeFormProps) {
     if (!user) return;
     setLoading(true);
     try {
-      const { error } = await supabase.from("incomes").insert([{
-        user_id: user.id, amount: parseFloat(formData.amount),
-        source: formData.source, description: formData.description, date: formData.date,
-      }]);
-      if (error) throw error;
+      const response = await fetch("/api/incomes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: parseFloat(formData.amount),
+          source: formData.source, description: formData.description, date: formData.date,
+        }),
+      });
+      if (!response.ok) throw new Error((await response.json()).error || "Database error");
       setFormData({ amount: "", source: "", description: "", date: new Date().toISOString().split("T")[0] });
       onSuccess?.();
     } catch (error) {

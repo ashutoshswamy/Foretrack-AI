@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useUser, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@/lib/auth-context";
+import AccountMenu from "@/components/AccountMenu";
 import {
   ArrowRight,
   BarChart3,
@@ -41,7 +42,7 @@ const item = {
 };
 
 export default function Home() {
-  const { user } = useUser();
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-[#0c0c0e] overflow-hidden relative">
@@ -69,7 +70,7 @@ export default function Home() {
             </span>
           </div>
 
-          <SignedOut>
+          {!user ? (
             <div className="flex items-center gap-3 sm:gap-4">
               <Link
                 id="nav-link-signin"
@@ -91,9 +92,7 @@ export default function Home() {
                 </Link>
               </motion.div>
             </div>
-          </SignedOut>
-
-          <SignedIn>
+          ) : (
             <div className="flex items-center gap-4">
               <Link
                 id="nav-link-dashboard"
@@ -105,12 +104,12 @@ export default function Home() {
               </Link>
               <div className="flex items-center gap-3 pl-4 border-l border-[#2a2a32]">
                 <span className="text-sm text-[#5a5a66] hidden sm:block">
-                  {user?.firstName || "User"}
+                  {user?.displayName || "User"}
                 </span>
-                <UserButton afterSignOutUrl="/" />
+                <AccountMenu />
               </div>
             </div>
-          </SignedIn>
+          )}
         </div>
       </motion.nav>
 
@@ -150,53 +149,55 @@ export default function Home() {
             variants={item}
             className="flex flex-col sm:flex-row gap-3 justify-center items-center"
           >
-            <SignedOut>
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Link
-                  id="hero-link-signup"
-                  href="/sign-up"
-                  className="group inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-sm sm:text-base shadow-lg shadow-[#c9a96e]/20 hover:shadow-xl hover:shadow-[#c9a96e]/25 transition-all duration-300"
+            {!user ? (
+              <>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  Get Started
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Link
-                  id="hero-link-signin"
-                  href="/sign-in"
-                  className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 bg-[#16161a] text-[#ededef] rounded-xl font-semibold text-sm sm:text-base border border-[#2a2a32] hover:border-[#c9a96e]/40 transition-all duration-300"
+                  <Link
+                    id="hero-link-signup"
+                    href="/sign-up"
+                    className="group inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-sm sm:text-base shadow-lg shadow-[#c9a96e]/20 hover:shadow-xl hover:shadow-[#c9a96e]/25 transition-all duration-300"
+                  >
+                    Get Started
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  Sign In
-                </Link>
-              </motion.div>
-            </SignedOut>
-
-            <SignedIn>
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Link
-                  id="hero-link-dashboard"
-                  href="/dashboard"
-                  className="group inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-base shadow-lg shadow-[#c9a96e]/20 transition-all duration-300"
+                  <Link
+                    id="hero-link-signin"
+                    href="/sign-in"
+                    className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 bg-[#16161a] text-[#ededef] rounded-xl font-semibold text-sm sm:text-base border border-[#2a2a32] hover:border-[#c9a96e]/40 transition-all duration-300"
+                  >
+                    Sign In
+                  </Link>
+                </motion.div>
+              </>
+            ) : (
+              <>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  Go to Dashboard
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              </motion.div>
-              <span className="inline-flex items-center gap-2 px-6 py-3 text-[#34d399] text-sm font-medium">
-                <CheckCircle className="w-4 h-4" />
-                You&apos;re all set
-              </span>
-            </SignedIn>
+                  <Link
+                    id="hero-link-dashboard"
+                    href="/dashboard"
+                    className="group inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-base shadow-lg shadow-[#c9a96e]/20 transition-all duration-300"
+                  >
+                    Go to Dashboard
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </motion.div>
+                <span className="inline-flex items-center gap-2 px-6 py-3 text-[#34d399] text-sm font-medium">
+                  <CheckCircle className="w-4 h-4" />
+                  You&apos;re all set
+                </span>
+              </>
+            )}
           </motion.div>
 
           {/* Stats */}
@@ -442,43 +443,45 @@ export default function Home() {
                 smarter with Foretrack AI.
               </p>
 
-              <SignedOut>
-                <motion.div
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Link
-                    id="cta-link-signup"
-                    href="/sign-up"
-                    className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-base shadow-lg shadow-[#c9a96e]/20 transition-all duration-300"
+              {!user ? (
+                <>
+                  <motion.div
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    Get Started for Free
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </motion.div>
-                <p className="text-xs text-[#5a5a66] mt-4">
-                  100% Free -- No credit card required
-                </p>
-              </SignedOut>
-
-              <SignedIn>
-                <motion.div
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Link
-                    id="cta-link-dashboard"
-                    href="/dashboard"
-                    className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-base shadow-lg shadow-[#c9a96e]/20 transition-all duration-300"
+                    <Link
+                      id="cta-link-signup"
+                      href="/sign-up"
+                      className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-base shadow-lg shadow-[#c9a96e]/20 transition-all duration-300"
+                    >
+                      Get Started for Free
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </motion.div>
+                  <p className="text-xs text-[#5a5a66] mt-4">
+                    100% Free -- No credit card required
+                  </p>
+                </>
+              ) : (
+                <>
+                  <motion.div
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    Continue to Dashboard
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </motion.div>
-                <p className="text-xs text-[#5a5a66] mt-4">
-                  Welcome back! Your financial journey continues.
-                </p>
-              </SignedIn>
+                    <Link
+                      id="cta-link-dashboard"
+                      href="/dashboard"
+                      className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#c9a96e] text-[#0c0c0e] rounded-xl font-semibold text-base shadow-lg shadow-[#c9a96e]/20 transition-all duration-300"
+                    >
+                      Continue to Dashboard
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </motion.div>
+                  <p className="text-xs text-[#5a5a66] mt-4">
+                    Welcome back! Your financial journey continues.
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </motion.div>

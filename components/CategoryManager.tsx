@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Tags, Plus, Trash2, Pencil, Check, Loader2, Palette, Search, Smile,
 } from "lucide-react";
-import { supabase, type Category } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
+import { type Category } from "@/lib/types";
+import { useAuth } from "@/lib/auth-context";
 
 type CategoryManagerProps = { onUpdate?: () => void; };
 
@@ -58,7 +58,7 @@ const colorOptions = [
 ];
 
 export default function CategoryManager({ onUpdate }: CategoryManagerProps) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -90,9 +90,9 @@ export default function CategoryManager({ onUpdate }: CategoryManagerProps) {
   const fetchCategories = useCallback(async () => {
     if (!user) return;
     try {
-      const { data, error } = await supabase.from("categories").select("*").eq("user_id", user.id).order("name");
-      if (error) throw error;
-      setCategories(data || []);
+      const response = await fetch("/api/categories");
+      if (!response.ok) throw new Error("Failed to fetch categories");
+      setCategories(await response.json());
     } catch (error) { console.error("Error fetching categories:", error); } finally { setLoading(false); }
   }, [user]);
 
@@ -103,19 +103,28 @@ export default function CategoryManager({ onUpdate }: CategoryManagerProps) {
     if (!user || !formData.name.trim()) return;
     setSaving(true);
     try {
-      if (editingId) {
-        const { error } = await supabase.from("categories").update({ name: formData.name.trim(), icon: formData.icon, color: formData.color }).eq("id", editingId);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.from("categories").insert([{ user_id: user.id, name: formData.name.trim(), icon: formData.icon, color: formData.color }]);
-        if (error) throw error;
+      const payload = { name: formData.name.trim(), icon: formData.icon, color: formData.color };
+      const response = editingId
+        ? await fetch(`/api/categories/${editingId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          })
+        : await fetch("/api/categories", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        if (body.code === "23505") throw new Error("A category with this name already exists");
+        throw new Error(body.error || "Failed to save category");
       }
       setFormData({ name: "", icon: "📦", color: "Gray" }); setShowForm(false); setEditingId(null);
       fetchCategories(); onUpdate?.();
     } catch (error: unknown) {
       console.error("Error saving category:", error);
-      if (error && typeof error === "object" && "code" in error && error.code === "23505") { alert("A category with this name already exists"); }
-      else { alert("Failed to save category"); }
+      alert(error instanceof Error ? error.message : "Failed to save category");
     } finally { setSaving(false); }
   };
 
@@ -126,8 +135,8 @@ export default function CategoryManager({ onUpdate }: CategoryManagerProps) {
   const deleteCategory = async (id: string) => {
     if (!confirm("Are you sure you want to delete this category? Expenses using this category won't be affected.")) return;
     try {
-      const { error } = await supabase.from("categories").delete().eq("id", id);
-      if (error) throw error;
+      const response = await fetch(`/api/categories/${id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete");
       fetchCategories(); onUpdate?.();
     } catch (error) { console.error("Error deleting category:", error); alert("Failed to delete category"); }
   };

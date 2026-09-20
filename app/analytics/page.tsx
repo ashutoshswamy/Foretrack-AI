@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { useUser, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -19,8 +19,9 @@ import {
   ArrowUpRight,
   ArrowDownRight,
 } from "lucide-react";
-import { supabase, type Expense, type Budget } from "@/lib/supabase";
+import { type Expense, type Income, type Budget } from "@/lib/types";
 import { useCurrency } from "@/lib/currency";
+import AccountMenu from "@/components/AccountMenu";
 
 const categoryConfig: {
   [key: string]: {
@@ -77,9 +78,10 @@ const categoryConfig: {
 type TimeRange = "week" | "month" | "quarter" | "year";
 
 export default function Analytics() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { formatAmount } = useCurrency();
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [incomes, setIncomes] = useState<Income[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<TimeRange>("month");
@@ -89,21 +91,14 @@ export default function Analytics() {
     setLoading(true);
 
     try {
-      const [expensesRes, budgetsRes] = await Promise.all([
-        supabase
-          .from("expenses")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("date", { ascending: false }),
-        supabase
-          .from("budgets")
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("is_active", true),
+      const [expensesRes, incomesRes, budgetsRes] = await Promise.all([
+        fetch("/api/expenses"),
+        fetch("/api/incomes"),
+        fetch("/api/budgets?active=true"),
       ]);
-
-      if (expensesRes.data) setExpenses(expensesRes.data);
-      if (budgetsRes.data) setBudgets(budgetsRes.data);
+      if (expensesRes.ok) setExpenses(await expensesRes.json());
+      if (incomesRes.ok) setIncomes(await incomesRes.json());
+      if (budgetsRes.ok) setBudgets(await budgetsRes.json());
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -147,6 +142,14 @@ export default function Analytics() {
     });
   }, [expenses, timeRange]);
 
+  const filteredIncomes = useMemo(() => {
+    const { start, end } = getDateRange(timeRange);
+    return incomes.filter((income) => {
+      const incomeDate = new Date(income.date);
+      return incomeDate >= start && incomeDate <= end;
+    });
+  }, [incomes, timeRange]);
+
   const previousPeriodExpenses = useMemo(() => {
     const { start, end } = getDateRange(timeRange);
     const periodLength = end.getTime() - start.getTime();
@@ -159,22 +162,23 @@ export default function Analytics() {
     });
   }, [expenses, timeRange]);
 
+  const previousPeriodIncomes = useMemo(() => {
+    const { start, end } = getDateRange(timeRange);
+    const periodLength = end.getTime() - start.getTime();
+    const prevStart = new Date(start.getTime() - periodLength);
+    const prevEnd = start;
+
+    return incomes.filter((income) => {
+      const incomeDate = new Date(income.date);
+      return incomeDate >= prevStart && incomeDate < prevEnd;
+    });
+  }, [incomes, timeRange]);
+
   const analytics = useMemo(() => {
-    const totalExpenses = filteredExpenses
-      .filter((e) => e.transaction_type === "expense")
-      .reduce((sum, e) => sum + e.amount, 0);
-
-    const totalIncome = filteredExpenses
-      .filter((e) => e.transaction_type === "income")
-      .reduce((sum, e) => sum + e.amount, 0);
-
-    const prevTotalExpenses = previousPeriodExpenses
-      .filter((e) => e.transaction_type === "expense")
-      .reduce((sum, e) => sum + e.amount, 0);
-
-    const prevTotalIncome = previousPeriodExpenses
-      .filter((e) => e.transaction_type === "income")
-      .reduce((sum, e) => sum + e.amount, 0);
+    const totalExpenses = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
+    const totalIncome = filteredIncomes.reduce((sum, i) => sum + i.amount, 0);
+    const prevTotalExpenses = previousPeriodExpenses.reduce((sum, e) => sum + e.amount, 0);
+    const prevTotalIncome = previousPeriodIncomes.reduce((sum, i) => sum + i.amount, 0);
 
     const expenseChange = prevTotalExpenses
       ? ((totalExpenses - prevTotalExpenses) / prevTotalExpenses) * 100
@@ -187,27 +191,23 @@ export default function Analytics() {
     const netSavings = totalIncome - totalExpenses;
     const savingsRate = totalIncome > 0 ? (netSavings / totalIncome) * 100 : 0;
 
-    const categoryBreakdown = filteredExpenses
-      .filter((e) => e.transaction_type === "expense")
-      .reduce(
-        (acc, expense) => {
-          const category = expense.category || "Other";
-          acc[category] = (acc[category] || 0) + expense.amount;
-          return acc;
-        },
-        {} as Record<string, number>,
-      );
+    const categoryBreakdown = filteredExpenses.reduce(
+      (acc, expense) => {
+        const category = expense.category || "Other";
+        acc[category] = (acc[category] || 0) + expense.amount;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
-    const dailySpending = filteredExpenses
-      .filter((e) => e.transaction_type === "expense")
-      .reduce(
-        (acc, expense) => {
-          const date = expense.date;
-          acc[date] = (acc[date] || 0) + expense.amount;
-          return acc;
-        },
-        {} as Record<string, number>,
-      );
+    const dailySpending = filteredExpenses.reduce(
+      (acc, expense) => {
+        const date = expense.date;
+        acc[date] = (acc[date] || 0) + expense.amount;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     const avgDailySpending =
       Object.values(dailySpending).length > 0
@@ -229,9 +229,9 @@ export default function Analytics() {
       categoryBreakdown,
       sortedCategories,
       avgDailySpending,
-      transactionCount: filteredExpenses.length,
+      transactionCount: filteredExpenses.length + filteredIncomes.length,
     };
-  }, [filteredExpenses, previousPeriodExpenses]);
+  }, [filteredExpenses, filteredIncomes, previousPeriodExpenses, previousPeriodIncomes]);
 
   const totalBudget = budgets.reduce((sum, b) => sum + b.amount, 0);
   const budgetUtilization =
@@ -263,7 +263,7 @@ export default function Analytics() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 bg-[#16161a] border-b border-[#2a2a32]"
+        className="relative z-20 bg-[#16161a] border-b border-[#2a2a32]"
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex justify-between items-center">
@@ -295,7 +295,7 @@ export default function Analytics() {
                   {analytics.transactionCount} transactions
                 </span>
               </div>
-              <UserButton afterSignOutUrl="/" />
+              <AccountMenu />
             </div>
           </div>
         </div>

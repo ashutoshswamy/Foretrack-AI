@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Loader2, CheckCircle } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/lib/auth-context";
 import { useCurrency } from "@/lib/currency";
 
 type BudgetFormProps = {
@@ -28,7 +27,7 @@ const periods = [
 ];
 
 export default function BudgetForm({ onSuccess }: BudgetFormProps) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { currency } = useCurrency();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -40,20 +39,23 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
     if (!user) return;
     setLoading(true);
     try {
-      const { error } = await supabase.from("budgets").insert([{
-        user_id: user.id, category: formData.category,
-        amount: parseFloat(formData.amount), period: formData.period,
-      }]);
-      if (error) throw error;
+      const response = await fetch("/api/budgets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category: formData.category,
+          amount: parseFloat(formData.amount), period: formData.period,
+        }),
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.error || "Database error");
+      }
       setFormData({ category: "", amount: "", period: "monthly" });
       onSuccess?.();
     } catch (error: unknown) {
       console.error("Error adding budget:", error);
-      if (error && typeof error === "object" && "code" in error && error.code === "23505") {
-        alert("A budget for this category and period already exists");
-      } else {
-        alert("Failed to add budget");
-      }
+      alert(error instanceof Error ? error.message : "Failed to add budget");
     } finally {
       setLoading(false);
     }

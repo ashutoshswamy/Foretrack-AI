@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Bot, Sparkles } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/lib/auth-context";
+import type { Expense, Budget } from "@/lib/types";
 
 type Message = {
   role: "user" | "assistant";
@@ -12,7 +12,7 @@ type Message = {
 };
 
 export default function AIChat() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: "Hi! I'm your AI financial assistant. Ask me anything about your spending, budgets, or for money-saving tips!" },
@@ -30,21 +30,25 @@ export default function AIChat() {
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
       const startDate = startOfMonth.toISOString().split("T")[0];
-      const { data: expensesData } = await supabase.from("expenses").select("category, amount, description, date").eq("user_id", user.id).gte("date", startDate);
-      const { data: budgetsData } = await supabase.from("budgets").select("*").eq("user_id", user.id).eq("period", "monthly");
+      const [expensesRes, budgetsRes] = await Promise.all([
+        fetch(`/api/expenses?from=${startDate}`),
+        fetch("/api/budgets?period=monthly"),
+      ]);
+      const expensesData: Expense[] = expensesRes.ok ? await expensesRes.json() : [];
+      const budgetsData: Budget[] = budgetsRes.ok ? await budgetsRes.json() : [];
       const spendingByCategory: { [key: string]: number } = {};
       let totalSpent = 0;
-      const expenses = expensesData?.map((e) => {
+      const expenses = expensesData.map((e) => {
         const amount = parseFloat(e.amount.toString());
         spendingByCategory[e.category] = (spendingByCategory[e.category] || 0) + amount;
         totalSpent += amount;
         return { category: e.category, amount, description: e.description, date: e.date };
-      }) || [];
-      const budgets = budgetsData?.map((b) => {
+      });
+      const budgets = budgetsData.map((b) => {
         const budgetAmount = parseFloat(b.amount.toString());
         const spent = spendingByCategory[b.category] || 0;
         return { category: b.category, amount: budgetAmount, spent, percentage: budgetAmount > 0 ? (spent / budgetAmount) * 100 : 0 };
-      }) || [];
+      });
       return { expenses, budgets, totalSpent };
     } catch { return { expenses: [], budgets: [], totalSpent: 0 }; }
   }, [user]);

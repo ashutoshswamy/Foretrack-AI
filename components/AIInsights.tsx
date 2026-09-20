@@ -5,9 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles, RefreshCw, AlertTriangle, Trophy, Lightbulb, Target, Rocket,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/lib/auth-context";
 import type { FinancialInsight, ExpenseData, BudgetData } from "@/lib/gemini";
+import type { Expense, Budget } from "@/lib/types";
 
 const iconMap: { [key: string]: React.ReactNode } = {
   "🚀": <Rocket className="w-3.5 h-3.5" />,
@@ -18,7 +18,7 @@ const iconMap: { [key: string]: React.ReactNode } = {
 };
 
 export default function AIInsights() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const [insights, setInsights] = useState<FinancialInsight[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,30 +32,29 @@ export default function AIInsights() {
       startOfMonth.setDate(1);
       const startDate = startOfMonth.toISOString().split("T")[0];
 
-      const { data: expensesData, error: expensesError } = await supabase
-        .from("expenses").select("category, amount, description, date")
-        .eq("user_id", user.id).gte("date", startDate);
-      if (expensesError) throw expensesError;
-
-      const { data: budgetsData, error: budgetsError } = await supabase
-        .from("budgets").select("*").eq("user_id", user.id).eq("period", "monthly");
-      if (budgetsError) throw budgetsError;
+      const [expensesRes, budgetsRes] = await Promise.all([
+        fetch(`/api/expenses?from=${startDate}`),
+        fetch("/api/budgets?period=monthly"),
+      ]);
+      if (!expensesRes.ok || !budgetsRes.ok) throw new Error("Failed to fetch financial data");
+      const expensesData: Expense[] = await expensesRes.json();
+      const budgetsData: Budget[] = await budgetsRes.json();
 
       const spendingByCategory: { [key: string]: number } = {};
       let totalSpent = 0;
 
-      const expenses: ExpenseData[] = expensesData?.map((e) => {
+      const expenses: ExpenseData[] = expensesData.map((e) => {
         const amount = parseFloat(e.amount.toString());
         spendingByCategory[e.category] = (spendingByCategory[e.category] || 0) + amount;
         totalSpent += amount;
-        return { category: e.category, amount, description: e.description, date: e.date };
-      }) || [];
+        return { category: e.category, amount, description: e.description ?? undefined, date: e.date };
+      });
 
-      const budgets: BudgetData[] = budgetsData?.map((b) => {
+      const budgets: BudgetData[] = budgetsData.map((b) => {
         const budgetAmount = parseFloat(b.amount.toString());
         const spent = spendingByCategory[b.category] || 0;
         return { category: b.category, amount: budgetAmount, spent, percentage: budgetAmount > 0 ? (spent / budgetAmount) * 100 : 0 };
-      }) || [];
+      });
 
       if (expenses.length === 0) {
         setInsights([{ type: "tip", title: "Start Tracking", message: "Add your first expense to unlock AI-powered financial insights!", icon: "🚀" }]);

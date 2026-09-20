@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { getUid } from "@/lib/session";
 import {
   generateFinancialInsights,
   type ExpenseData,
@@ -39,7 +39,7 @@ function validateBudgetData(budget: unknown): budget is BudgetData {
 export async function POST(request: NextRequest) {
   try {
     // Authentication check
-    const { userId } = await auth();
+    const userId = await getUid();
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

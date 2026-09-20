@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { getUid } from "@/lib/session";
 import { categorizeExpense } from "@/lib/gemini";
 
 // Input validation constants
@@ -9,7 +9,7 @@ const MIN_DESCRIPTION_LENGTH = 1;
 export async function POST(request: NextRequest) {
   try {
     // Authentication check
-    const { userId } = await auth();
+    const userId = await getUid();
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

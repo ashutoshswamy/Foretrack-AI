@@ -4,7 +4,7 @@ const apiKey = process.env.GEMINI_API_KEY!;
 
 export const genAI = new GoogleGenAI({ apiKey });
 
-export const model = "gemini-3-flash-preview";
+export const model = "gemini-3.5-flash-lite";
 
 export type ExpenseData = {
   category: string;

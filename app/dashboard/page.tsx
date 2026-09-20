@@ -1,6 +1,5 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,6 +23,7 @@ import AIInsights from "@/components/AIInsights";
 import AIChat from "@/components/AIChat";
 import CurrencySelector from "@/components/CurrencySelector";
 import CategoryManager from "@/components/CategoryManager";
+import AccountMenu from "@/components/AccountMenu";
 
 export default function Dashboard() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -48,7 +48,7 @@ export default function Dashboard() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="relative z-10 bg-[#16161a] border-b border-[#2a2a32]"
+        className="relative z-20 bg-[#16161a] border-b border-[#2a2a32]"
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex justify-between items-center">
@@ -93,7 +93,8 @@ export default function Dashboard() {
                   All systems active
                 </span>
               </div>
-              <UserButton afterSignOutUrl="/" />
+              <CurrencySelector />
+              <AccountMenu />
             </div>
           </div>
         </div>
@@ -106,17 +107,14 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4"
+          className="mb-6 sm:mb-8"
         >
-          <div>
-            <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-[#ededef] mb-1 tracking-tight">
-              Welcome back
-            </h2>
-            <p className="text-sm text-[#5a5a66]">
-              Here&apos;s an overview of your financial activity
-            </p>
-          </div>
-          <CurrencySelector />
+          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-[#ededef] mb-1 tracking-tight">
+            Welcome back
+          </h2>
+          <p className="text-sm text-[#5a5a66]">
+            Here&apos;s an overview of your financial activity
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

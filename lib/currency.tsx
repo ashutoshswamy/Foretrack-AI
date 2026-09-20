@@ -1,8 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { useUser } from "@clerk/nextjs";
-import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/lib/auth-context";
 
 export type Currency = {
   code: string;
@@ -40,7 +39,8 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(
 );
 
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
-  const { user, isLoaded } = useUser();
+  const { user, loading: authLoading } = useAuth();
+  const isLoaded = !authLoading;
   const [currency, setCurrencyState] = useState<Currency>(currencies[0]);
   const [loading, setLoading] = useState(true);
 
@@ -55,20 +55,17 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
         if (found) setCurrencyState(found);
       }
 
-      const { data, error } = await supabase
-        .from("user_settings")
-        .select("currency")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (error) {
-        console.error("Error loading currency from DB:", error);
-        // Continue with localStorage value or default
-      } else if (data?.currency) {
-        const found = currencies.find((c) => c.code === data.currency);
-        if (found) {
-          setCurrencyState(found);
-          localStorage.setItem("foretrack_currency", found.code);
+      const response = await fetch("/api/user-settings");
+      if (!response.ok) {
+        console.error("Error loading currency from DB:", response.statusText);
+      } else {
+        const data = await response.json();
+        if (data?.currency) {
+          const found = currencies.find((c) => c.code === data.currency);
+          if (found) {
+            setCurrencyState(found);
+            localStorage.setItem("foretrack_currency", found.code);
+          }
         }
       }
     } catch (error) {
@@ -98,16 +95,12 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
 
     if (user) {
       try {
-        const { error } = await supabase.from("user_settings").upsert(
-          {
-            user_id: user.id,
-            currency: newCurrency.code,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: "user_id" },
-        );
-
-        if (error) console.error("Error saving currency:", error);
+        const response = await fetch("/api/user-settings", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ currency: newCurrency.code }),
+        });
+        if (!response.ok) console.error("Error saving currency:", response.statusText);
       } catch (error) {
         console.error("Error saving currency:", error);
       }

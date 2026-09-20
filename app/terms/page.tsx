@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     description:
       "Review the terms and conditions governing the use of Foretrack AI personal finance tools.",
     url: "https://foretrackai.in/terms",
+    images: [
+      { url: "/og-image.png", width: 1730, height: 909, alt: "Foretrack AI" },
+    ],
   },
 };
 
@@ -24,8 +27,8 @@ export default function TermsOfService() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
-              <PiggyBank className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-[#c9a96e] flex items-center justify-center shadow-lg">
+              <PiggyBank className="w-5 h-5 text-[#0c0c0e]" />
             </div>
             <span className="text-xl font-bold gradient-text">
               Foretrack AI
@@ -33,7 +36,7 @@ export default function TermsOfService() {
           </Link>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition-colors"
+            className="inline-flex items-center gap-2 text-[#8b8b96] hover:text-[#c9a96e] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -44,17 +47,17 @@ export default function TermsOfService() {
       {/* Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="main-content">
         <div className="glass-card rounded-3xl p-8 md:p-12 animate-fade-in">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-[#ededef] mb-2">
             Terms of Service
           </h1>
-          <p className="text-gray-500 mb-8">Last updated: February 1, 2026</p>
+          <p className="text-[#5a5a66] mb-8">Last updated: February 1, 2026</p>
 
-          <div className="prose prose-gray max-w-none">
+          <div className="max-w-none">
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 1. Acceptance of Terms
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 By accessing and using Foretrack AI, you agree to be bound by
                 these Terms of Service. If you do not agree to these terms,
                 please do not use our service.
@@ -62,10 +65,10 @@ export default function TermsOfService() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 2. Description of Service
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 Foretrack AI is a free expense tracking and budgeting
                 application that uses artificial intelligence to help users
                 manage their finances. Our services include expense tracking,
@@ -75,13 +78,13 @@ export default function TermsOfService() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 3. User Accounts
               </h2>
-              <p className="text-gray-600 leading-relaxed mb-4">
+              <p className="text-[#8b8b96] leading-relaxed mb-4">
                 When creating an account, you agree to:
               </p>
-              <ul className="list-disc list-inside text-gray-600 space-y-2">
+              <ul className="list-disc list-inside text-[#8b8b96] space-y-2">
                 <li>Provide accurate and complete information</li>
                 <li>Maintain the security of your account credentials</li>
                 <li>Notify us immediately of any unauthorized access</li>
@@ -90,13 +93,13 @@ export default function TermsOfService() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 4. Acceptable Use
               </h2>
-              <p className="text-gray-600 leading-relaxed mb-4">
+              <p className="text-[#8b8b96] leading-relaxed mb-4">
                 You agree not to:
               </p>
-              <ul className="list-disc list-inside text-gray-600 space-y-2">
+              <ul className="list-disc list-inside text-[#8b8b96] space-y-2">
                 <li>Use the service for any illegal purposes</li>
                 <li>Attempt to gain unauthorized access to our systems</li>
                 <li>Interfere with or disrupt the service</li>
@@ -106,10 +109,10 @@ export default function TermsOfService() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 5. Intellectual Property
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 The Foretrack AI name, logo, and all related content are owned
                 by us. You retain ownership of the financial data you input into
                 the application. By using our service, you grant us a limited
@@ -118,10 +121,10 @@ export default function TermsOfService() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 6. Disclaimer
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 Foretrack AI is provided &ldquo;as is&rdquo; without warranties
                 of any kind. Our AI-powered insights are for informational
                 purposes only and should not be considered financial advice.
@@ -131,10 +134,10 @@ export default function TermsOfService() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 7. Limitation of Liability
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 We shall not be liable for any indirect, incidental, special, or
                 consequential damages arising from your use of the service. Our
                 total liability shall not exceed the amount you have paid us
@@ -143,10 +146,10 @@ export default function TermsOfService() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 8. Changes to Terms
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 We reserve the right to modify these terms at any time. We will
                 notify users of significant changes. Continued use of the
                 service after changes constitutes acceptance of the new terms.
@@ -154,15 +157,15 @@ export default function TermsOfService() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#ededef] mb-4">
                 9. Contact Us
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-[#8b8b96] leading-relaxed">
                 If you have any questions about these Terms of Service, please
                 contact us at{" "}
                 <a
                   href="mailto:ashutoshswamy397@gmail.com"
-                  className="text-indigo-600 hover:underline"
+                  className="text-[#c9a96e] hover:text-[#d4b87e] hover:underline"
                 >
                   ashutoshswamy397@gmail.com
                 </a>

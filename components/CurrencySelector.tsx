@@ -20,12 +20,13 @@ export default function CurrencySelector() {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1e1e24] border border-[#2a2a32] hover:border-[#c9a96e]/30 transition-colors"
+        title="Currency"
+        className="flex items-center justify-center gap-2 w-9 h-9 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-[#1e1e24] border border-[#2a2a32] hover:border-[#c9a96e]/30 transition-colors"
       >
         <Coins className="w-4 h-4 text-[#c9a96e]" />
-        <span className="font-medium text-[#ededef] text-sm">{currency.code}</span>
+        <span className="hidden sm:inline font-medium text-[#ededef] text-sm">{currency.code}</span>
         <ChevronDown
-          className={`w-4 h-4 text-[#5a5a66] transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`hidden sm:block w-4 h-4 text-[#5a5a66] transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
       </motion.button>
 

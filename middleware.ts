@@ -1,12 +1,39 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
+import { SESSION_COOKIE } from "@/lib/session-cookie";
 
-const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)"]);
+const PUBLIC_ROUTES = [
+  /^\/$/,
+  /^\/sign-in(\/.*)?$/,
+  /^\/sign-up(\/.*)?$/,
+  /^\/privacy$/,
+  /^\/terms$/,
+  /^\/cookies$/,
+  /^\/robots\.txt$/,
+  /^\/sitemap\.xml$/,
+];
 
-export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
-    await auth.protect();
+function isPublicRoute(pathname: string) {
+  return PUBLIC_ROUTES.some((re) => re.test(pathname));
+}
+
+export default function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  if (isPublicRoute(pathname) || pathname.startsWith("/api")) {
+    // API routes verify the session cookie themselves (see lib/session.ts)
+    // and return a proper 401 JSON response instead of a redirect.
+    return NextResponse.next();
   }
-});
+
+  const hasSession = request.cookies.has(SESSION_COOKIE);
+  if (!hasSession) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/sign-in";
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [

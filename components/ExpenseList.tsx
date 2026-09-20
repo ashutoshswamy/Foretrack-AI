@@ -3,8 +3,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ClipboardList, Trash2, Package, Pencil, X, Check, Loader2 } from "lucide-react";
-import { supabase, type Expense } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
+import { type Expense } from "@/lib/types";
+import { useAuth } from "@/lib/auth-context";
 import { useCurrency } from "@/lib/currency";
 
 type ExpenseListProps = { refreshTrigger?: number; onUpdate?: () => void; };
@@ -22,7 +22,7 @@ const categoryConfig: { [key: string]: { icon: string; color: string; bgColor: s
 const categories = ["Food", "Transport", "Entertainment", "Shopping", "Bills", "Health", "Other"];
 
 export default function ExpenseList({ refreshTrigger, onUpdate }: ExpenseListProps) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { formatAmount, currency } = useCurrency();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,9 +33,9 @@ export default function ExpenseList({ refreshTrigger, onUpdate }: ExpenseListPro
   const fetchExpenses = useCallback(async () => {
     if (!user) return;
     try {
-      const { data, error } = await supabase.from("expenses").select("*").eq("user_id", user.id).order("date", { ascending: false }).limit(10);
-      if (error) throw error;
-      setExpenses(data || []);
+      const response = await fetch("/api/expenses?limit=10");
+      if (!response.ok) throw new Error("Failed to fetch expenses");
+      setExpenses(await response.json());
     } catch (error) { console.error("Error fetching expenses:", error); } finally { setLoading(false); }
   }, [user]);
 
@@ -44,8 +44,8 @@ export default function ExpenseList({ refreshTrigger, onUpdate }: ExpenseListPro
   const deleteExpense = async (id: string) => {
     if (!confirm("Are you sure you want to delete this expense?")) return;
     try {
-      const { error } = await supabase.from("expenses").delete().eq("id", id);
-      if (error) throw error;
+      const response = await fetch(`/api/expenses/${id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete");
       fetchExpenses(); onUpdate?.();
     } catch (error) { console.error("Error deleting expense:", error); alert("Failed to delete expense"); }
   };
@@ -59,10 +59,14 @@ export default function ExpenseList({ refreshTrigger, onUpdate }: ExpenseListPro
   const saveEdit = async (id: string) => {
     if (!user) return; setSaving(true);
     try {
-      const { error } = await supabase.from("expenses").update({
-        amount: parseFloat(editForm.amount), category: editForm.category, description: editForm.description, date: editForm.date,
-      }).eq("id", id);
-      if (error) throw error;
+      const response = await fetch(`/api/expenses/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: parseFloat(editForm.amount), category: editForm.category, description: editForm.description, date: editForm.date,
+        }),
+      });
+      if (!response.ok) throw new Error("Failed to update");
       setEditingId(null); fetchExpenses(); onUpdate?.();
     } catch (error) { console.error("Error updating expense:", error); alert("Failed to update expense"); } finally { setSaving(false); }
   };

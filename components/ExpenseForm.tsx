@@ -3,8 +3,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Loader2, Sparkles, Calendar } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/lib/auth-context";
 import { useCurrency } from "@/lib/currency";
 
 type ExpenseFormProps = {
@@ -22,7 +21,7 @@ const categories = [
 ];
 
 export default function ExpenseForm({ onSuccess }: ExpenseFormProps) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { currency } = useCurrency();
   const [loading, setLoading] = useState(false);
   const [categorizing, setCategorizing] = useState(false);
@@ -69,11 +68,17 @@ export default function ExpenseForm({ onSuccess }: ExpenseFormProps) {
     if (!user) return;
     setLoading(true);
     try {
-      const { error } = await supabase.from("expenses").insert([{
-        user_id: user.id, amount: parseFloat(formData.amount),
-        category: formData.category, description: formData.description, date: formData.date,
-      }]);
-      if (error) { console.error("Supabase error:", error.message, error.details, error.hint); throw new Error(error.message || "Database error"); }
+      const response = await fetch("/api/expenses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: parseFloat(formData.amount),
+          category: formData.category,
+          description: formData.description,
+          date: formData.date,
+        }),
+      });
+      if (!response.ok) throw new Error((await response.json()).error || "Database error");
       setFormData({ amount: "", category: "", description: "", date: new Date().toISOString().split("T")[0] });
       onSuccess?.();
     } catch (error) {

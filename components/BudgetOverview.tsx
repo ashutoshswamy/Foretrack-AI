@@ -3,9 +3,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BarChart3, Calculator, AlertTriangle, Pencil, Trash2, X, Check, Loader2 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/lib/auth-context";
 import { useCurrency } from "@/lib/currency";
+import type { Expense, Budget } from "@/lib/types";
 
 type BudgetStats = { id: string; category: string; spent: number; budget: number; percentage: number; period: string; };
 type BudgetOverviewProps = { onUpdate?: () => void; };
@@ -21,7 +21,7 @@ const categoryConfig: { [key: string]: { icon: string; color: string; bgColor: s
 };
 
 export default function BudgetOverview({ onUpdate }: BudgetOverviewProps) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { formatAmount, currency } = useCurrency();
   const [stats, setStats] = useState<BudgetStats[]>([]);
   const [totalSpent, setTotalSpent] = useState(0);
@@ -36,22 +36,25 @@ export default function BudgetOverview({ onUpdate }: BudgetOverviewProps) {
     try {
       const startOfMonth = new Date(); startOfMonth.setDate(1);
       const startDate = startOfMonth.toISOString().split("T")[0];
-      const { data: expenses, error: expensesError } = await supabase.from("expenses").select("category, amount").eq("user_id", user.id).gte("date", startDate);
-      if (expensesError) throw expensesError;
-      const { data: budgets, error: budgetsError } = await supabase.from("budgets").select("*").eq("user_id", user.id).eq("period", "monthly");
-      if (budgetsError) throw budgetsError;
+      const [expensesRes, budgetsRes] = await Promise.all([
+        fetch(`/api/expenses?from=${startDate}`),
+        fetch("/api/budgets?period=monthly"),
+      ]);
+      if (!expensesRes.ok || !budgetsRes.ok) throw new Error("Failed to fetch budget data");
+      const expenses: Expense[] = await expensesRes.json();
+      const budgets: Budget[] = await budgetsRes.json();
 
       const spendingByCategory: { [key: string]: number } = {};
       let total = 0;
-      expenses?.forEach((expense) => { const amount = parseFloat(expense.amount.toString()); spendingByCategory[expense.category] = (spendingByCategory[expense.category] || 0) + amount; total += amount; });
+      expenses.forEach((expense) => { const amount = parseFloat(expense.amount.toString()); spendingByCategory[expense.category] = (spendingByCategory[expense.category] || 0) + amount; total += amount; });
       setTotalSpent(total);
-      const budgetTotal = budgets?.reduce((sum, b) => sum + parseFloat(b.amount.toString()), 0) || 0;
+      const budgetTotal = budgets.reduce((sum, b) => sum + parseFloat(b.amount.toString()), 0);
       setTotalBudget(budgetTotal);
-      const budgetStats: BudgetStats[] = budgets?.map((budget) => {
+      const budgetStats: BudgetStats[] = budgets.map((budget) => {
         const spent = spendingByCategory[budget.category] || 0;
         const budgetAmount = parseFloat(budget.amount.toString());
         return { id: budget.id, category: budget.category, spent, budget: budgetAmount, percentage: budgetAmount > 0 ? (spent / budgetAmount) * 100 : 0, period: budget.period };
-      }) || [];
+      });
       setStats(budgetStats);
     } catch (error) { console.error("Error fetching budget stats:", error); } finally { setLoading(false); }
   }, [user]);
@@ -64,8 +67,12 @@ export default function BudgetOverview({ onUpdate }: BudgetOverviewProps) {
   const saveEdit = async (id: string) => {
     if (!user) return; setSaving(true);
     try {
-      const { error } = await supabase.from("budgets").update({ amount: parseFloat(editAmount) }).eq("id", id);
-      if (error) throw error;
+      const response = await fetch(`/api/budgets/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: parseFloat(editAmount) }),
+      });
+      if (!response.ok) throw new Error("Failed to update");
       setEditingId(null); fetchBudgetStats(); onUpdate?.();
     } catch (error) { console.error("Error updating budget:", error); alert("Failed to update budget"); } finally { setSaving(false); }
   };
@@ -73,8 +80,8 @@ export default function BudgetOverview({ onUpdate }: BudgetOverviewProps) {
   const deleteBudget = async (id: string) => {
     if (!confirm("Are you sure you want to delete this budget?")) return;
     try {
-      const { error } = await supabase.from("budgets").delete().eq("id", id);
-      if (error) throw error;
+      const response = await fetch(`/api/budgets/${id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete");
       fetchBudgetStats(); onUpdate?.();
     } catch (error) { console.error("Error deleting budget:", error); alert("Failed to delete budget"); }
   };
