@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
 
+  // firebase-admin (via jwks-rsa -> jose) ships an ESM-only build; bundling
+  // it into the server chunk makes turbopack `require()` it and throw
+  // ERR_REQUIRE_ESM. Keep it external so Node loads it natively at runtime.
+  serverExternalPackages: ["firebase-admin"],
+
   // Security headers
   async headers() {
     return [

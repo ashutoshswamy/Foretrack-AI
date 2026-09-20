@@ -2,87 +2,83 @@
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase)](https://supabase.com/)
-[![Clerk](https://img.shields.io/badge/Clerk-Auth-6C47FF?logo=clerk)](https://clerk.com/)
+[![Neon](https://img.shields.io/badge/Neon-PostgreSQL-00E599?logo=postgresql&logoColor=white)](https://neon.tech/)
+[![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A modern, AI-powered expense tracking and budgeting application built with Next.js, Supabase, Clerk authentication, and Google Gemini AI. Take control of your finances with smart categorization, personalized insights, and an intelligent financial assistant.
+A modern, AI-powered expense tracking and budgeting application built with Next.js, Neon Postgres, Firebase Authentication, and Google Gemini AI. Take control of your finances with smart categorization, personalized insights, and an intelligent financial assistant.
 
 ## ✨ Features
 
 - 📊 **Expense Tracking**: Log and categorize your expenses easily with an intuitive interface
-- 💰 **Budget Management**: Set budgets for different categories and track your spending in real-time
-- 📈 **Income Tracking**: Track multiple income sources and monitor your cash flow
+- 💰 **Budget Management**: Set budgets per category and period, with visual progress tracking
+- 📈 **Income Tracking**: Track income sources and monitor your cash flow
 - 🤖 **AI-Powered Insights**: Get personalized financial insights powered by Google Gemini
 - ✨ **Smart Categorization**: AI automatically suggests categories based on expense descriptions
 - 💬 **AI Financial Assistant**: Chat with an AI assistant about your finances
-- 🏷️ **Custom Categories & Tags**: Organize expenses with custom categories and tags
-- 🎯 **Savings Goals**: Set and track progress towards your financial goals
-- 💱 **Multi-Currency Support**: Track expenses in multiple currencies
-- 🔐 **Secure Authentication**: User authentication powered by Clerk
-- 💾 **Cloud Storage**: All data securely stored in Supabase with RLS
+- 🏷️ **Custom Categories**: Organize expenses with your own categories, icons, and colors
+- 💱 **Currency Selection**: Choose your preferred display currency from 15+ supported currencies
+- 🔐 **Secure Authentication**: Google sign-in via Firebase, with server-verified session cookies
+- 💾 **Cloud Storage**: All data stored in Neon (serverless PostgreSQL)
 - 📱 **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - 🌙 **Modern UI**: Beautiful interface with smooth animations powered by Framer Motion
 
 ## 🛠️ Tech Stack
 
-| Category           | Technology                             |
-| ------------------ | -------------------------------------- |
-| **Framework**      | Next.js 16 with App Router             |
-| **Language**       | TypeScript 5.x                         |
-| **Authentication** | Clerk                                  |
-| **Database**       | Supabase (PostgreSQL)                  |
-| **AI**             | Google Gemini (gemini-3-flash-preview) |
-| **Styling**        | Tailwind CSS 4.x                       |
-| **Animations**     | Framer Motion                          |
-| **Icons**          | Lucide React                           |
+| Category           | Technology                        |
+| ------------------- | ---------------------------------- |
+| **Framework**       | Next.js 16 (App Router, Turbopack) |
+| **Language**        | TypeScript 5.x                     |
+| **Authentication**  | Firebase Auth (Google sign-in) + server session cookies |
+| **Database**        | Neon (serverless PostgreSQL)       |
+| **AI**              | Google Gemini (`gemini-3.5-flash-lite`) |
+| **Styling**         | Tailwind CSS 4.x                   |
+| **Animations**      | Framer Motion                      |
+| **Icons**           | Lucide React                       |
 
 ## 🔒 Security
 
 This project implements several security measures:
 
-- **Authentication**: Secure user auth via Clerk
-- **Data Isolation**: Row Level Security (RLS) on all tables
-- **API Protection**: Server-side API routes for sensitive operations
-- **Environment Variables**: Secrets never exposed to client
+- **Authentication**: Google sign-in via Firebase, exchanged for an `httpOnly` session cookie verified server-side on every request
+- **Data Isolation**: Every query is scoped by `user_id` at the API layer (see `lib/session.ts`)
+- **API Protection**: All database and AI operations run through server-side Next.js API routes — no credentials reach the client
+- **Security Headers & CSP**: HSTS, X-Frame-Options, and a locked-down Content-Security-Policy are set in `next.config.ts`
+- **Environment Variables**: Secrets (`DATABASE_URL`, `FIREBASE_*` admin credentials, `GEMINI_API_KEY`) never exposed to the client
 
-> 🔐 See [SECURITY.md](SECURITY.md) for our security policy and vulnerability reporting.
+> 🔐 See [SECURITY.md](SECURITY.md) for our full security policy and vulnerability reporting.
 
 ## ✨ Features Overview
 
 ### 💸 Expense Tracking
 
 - Add expenses with amount, category, description, and date
-- View recent expenses with edit/delete functionality
+- View, edit, and delete recent expenses
 - AI-powered automatic categorization
-- Tag expenses for better organization
 
 ### 📈 Income Management
 
-- Track multiple income sources
-- Support for recurring income
+- Track income by source (Salary, Freelance, Business, etc.)
 - Income vs. expense analytics
 
 ### 💰 Budget Management
 
-- Set daily, weekly, monthly, or yearly budgets per category
+- Set daily, weekly, monthly, quarterly, or yearly budgets per category
 - Visual progress bars showing budget usage
-- Color-coded warnings (green, yellow, red) based on spending
-- Automatic calculation of spending trends
+- Color-coded warnings based on spending
 
 ### 🤖 AI Features
 
-- **Smart Categorization**: AI suggests categories based on descriptions
-- **Financial Insights**: Personalized tips and warnings
+- **Smart Categorization**: AI suggests a category based on the expense description
+- **Financial Insights**: Personalized tips and warnings from Gemini
 - **Chat Assistant**: Ask questions about your finances
-- **Spending Analysis**: Pattern recognition and recommendations
+- **Spending Analysis**: Natural-language summary of spending patterns
 
 ### 🔐 User Authentication
 
-- Secure sign-up and sign-in with Clerk
-- Social login support (Google, GitHub, etc.)
-- Protected routes requiring authentication
-- User-specific data isolation
+- Google sign-in via Firebase Authentication
+- Session verified server-side via Firebase Admin on every protected request
+- Middleware-protected routes with user-specific data isolation
 
 ## 📚 Documentation
 
@@ -109,8 +105,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - [Next.js](https://nextjs.org/) - The React Framework
-- [Supabase](https://supabase.com/) - Open source Firebase alternative
-- [Clerk](https://clerk.com/) - Authentication and user management
+- [Neon](https://neon.tech/) - Serverless PostgreSQL
+- [Firebase](https://firebase.google.com/) - Authentication
 - [Google Gemini](https://ai.google.dev/) - AI-powered features
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
