@@ -57,7 +57,9 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
 
       const response = await fetch("/api/user-settings");
       if (!response.ok) {
-        console.error("Error loading currency from DB:", response.statusText);
+        // statusText is always "" over HTTP/2 (no reason-phrase on the wire),
+        // so log the status code instead of relying on it.
+        console.error("Error loading currency from DB:", response.status);
       } else {
         const data = await response.json();
         if (data?.currency) {
